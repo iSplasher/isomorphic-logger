@@ -5,7 +5,8 @@
   "description": "Isomorphic logger",
   "main": "client.js",
   "files": [
-    "src",
+    "src/main/",
+    "src/.babelrc",
     "client.js",
     "server.js"
   ],
