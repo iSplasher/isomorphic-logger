@@ -5,7 +5,7 @@
  */
 export function createArrayAppender(array) {
   if (Array.isArray(array)) {
-    return function (record) {
+    return record => {
       array.push(record);
       return record;
     };

@@ -11,7 +11,7 @@ export function createFileAppender(path, {
   let lastAppendTime = 0;
   let timeoutId;
 
-  return function({level, messages}) {
+  return ({level, messages}) => {
     buffer.push(messages.join(' '));
     clearTimeout(timeoutId);
 

@@ -6,7 +6,7 @@ import isObjectLike from 'lodash/isObjectLike';
  * Should be used in node environment only.
  */
 export function createInspector(options) {
-  return function ({level, messages}) {
+  return ({level, messages}) => {
 
     messages = messages.map(message => {
       if (isObjectLike(message)) {

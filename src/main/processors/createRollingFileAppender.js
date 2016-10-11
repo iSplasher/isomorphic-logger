@@ -17,7 +17,7 @@ export function createRollingFileAppender(path, {
     index++;
   }
 
-  return function({level, messages}) {
+  return ({level, messages}) => {
     fs.stat(path, (error, stats) => {
       if (error) {
         return;

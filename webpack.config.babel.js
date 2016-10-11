@@ -1,6 +1,4 @@
-var webpack = require('webpack');
-
-module.exports = [
+export default [
   {
     target: 'node',
     entry: './src/main/server.js',

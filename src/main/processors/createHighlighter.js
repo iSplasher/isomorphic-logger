@@ -14,7 +14,7 @@ const DEFAULT_COLORS = {
  * logging level of the provided record. Useful for terminal logging only.
  */
 export function createHighlighter(colors = DEFAULT_COLORS) {
-  return function ({level, messages}) {
+  return ({level, messages}) => {
 
     messages = messages.map(message => {
       if (!isObjectLike(message)) {

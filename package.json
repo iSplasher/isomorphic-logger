@@ -1,12 +1,11 @@
 {
   "name": "@grabrinc/isomorphic-logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Grabr Inc.",
   "description": "Isomorphic logger",
   "main": "client.js",
   "files": [
     "src/main/",
-    "src/.babelrc",
     "client.js",
     "server.js"
   ],
@@ -16,7 +15,9 @@
   },
   "homepage": "https://github.com/Grabr/isomorphic-logger",
   "scripts": {
-    "package": "webpack -p"
+    "package": "webpack -p",
+    "pretest": "rm -r target/test & webpack -d --progress --config webpack.test.config.babel.js",
+    "test": "jasmine-node --matchall --test-dir target/test/"
   },
   "devDependencies": {
     "babel-core": "~6.3.26",
