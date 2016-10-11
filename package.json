@@ -1,0 +1,33 @@
+{
+  "name": "@grabrinc/isomorphic-logger",
+  "version": "0.0.1",
+  "author": "Grabr Inc.",
+  "description": "Isomorphic logger with modular structure",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "processors"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Grabr/isomorphic-logger.git"
+  },
+  "homepage": "https://github.com/Grabr/isomorphic-logger",
+  "scripts": {
+    "package": "webpack -p"
+  },
+  "devDependencies": {
+    "babel-core": "~6.3.26",
+    "babel-loader": "~6.2.0",
+    "babel-plugin-transform-runtime": "~6.6.0",
+    "babel-preset-es2015": "~6.6.0",
+    "babel-preset-stage-0": "~6.5.0",
+    "glob": "~7.0.5",
+    "jasmine": "",
+    "jasmine-node": "~1.14.5",
+    "webpack": "2.1.0-beta.22"
+  },
+  "dependencies": {
+    "lodash": ""
+  }
+}

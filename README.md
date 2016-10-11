@@ -1,2 +1,3 @@
-# isomorphic-logger
+# Isomorphic Logger
+
 Isomorphic logger with modular structure
