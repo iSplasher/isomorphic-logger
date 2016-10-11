@@ -20,5 +20,5 @@ export function prependDateAndLevel({level, messages}) {
     level
   );
 
-  return {level, messages}
+  return {level, messages};
 }

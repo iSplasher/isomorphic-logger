@@ -2,11 +2,12 @@
   "name": "@grabrinc/isomorphic-logger",
   "version": "0.0.1",
   "author": "Grabr Inc.",
-  "description": "Isomorphic logger with modular structure",
-  "main": "index.js",
+  "description": "Isomorphic logger",
+  "main": "client.js",
   "files": [
-    "index.js",
-    "processors"
+    "src",
+    "client.js",
+    "server.js"
   ],
   "repository": {
     "type": "git",

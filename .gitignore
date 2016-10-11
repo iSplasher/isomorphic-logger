@@ -1,7 +1,9 @@
 ### Project
 
 ## Assembly target defined in Webpack config
-target/
+/client.js
+/server.js
+/processors
 
 
 ### JetBrains
