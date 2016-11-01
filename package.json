@@ -1,7 +1,7 @@
 {
   "name": "@grabrinc/isomorphic-logger",
   "version": "0.0.2",
-  "author": "Savva Mikhalevski <savva@grabr.io>",
+  "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
   "description": "Isomorphic logger",
   "keywords": [
     "logger",
