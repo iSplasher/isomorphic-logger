@@ -1,8 +1,19 @@
 {
   "name": "@grabrinc/isomorphic-logger",
-  "version": "0.1.0",
-  "author": "Grabr Inc.",
+  "version": "0.0.2",
+  "author": "Savva Mikhalevski <smikhalevski@gmail.com>",
   "description": "Isomorphic logger",
+  "keywords": [
+    "logger",
+    "node",
+    "clent",
+    "web",
+    "isomorphic",
+    "rolling",
+    "file",
+    "debug"
+  ],
+  "license": "MIT",
   "main": "client.js",
   "files": [
     "src/main/",
@@ -13,9 +24,12 @@
     "type": "git",
     "url": "https://github.com/Grabr/isomorphic-logger.git"
   },
+  "bugs": {
+    "url": "https://github.com/Grabr/isomorphic-logger/issues"
+  },
   "homepage": "https://github.com/Grabr/isomorphic-logger",
   "scripts": {
-    "package": "webpack -d",
+    "package": "webpack -p",
     "pretest": "rm -r target/test & webpack -d --progress --config webpack.test.config.babel.js",
     "test": "jasmine-node --matchall --test-dir target/test/"
   },
