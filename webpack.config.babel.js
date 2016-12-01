@@ -1,27 +1,10 @@
 export default [
   {
     target: 'node',
-    entry: './src/main/server.js',
+    entry: './src/main/index.js',
     output: {
       path: '.',
-      filename: 'server.js',
-      libraryTarget: 'commonjs2'
-    },
-    node: {
-      __dirname: false
-    },
-    module: {
-      loaders: [
-        {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
-      ]
-    }
-  },
-  {
-    target: 'web',
-    entry: './src/main/client.js',
-    output: {
-      path: '.',
-      filename: 'client.js',
+      filename: 'index.js',
       libraryTarget: 'commonjs2'
     },
     module: {

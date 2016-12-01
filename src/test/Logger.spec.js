@@ -1,38 +1,63 @@
-import {Logger} from "../main/Logger";
+import delay from 'delay';
+import {Logger} from '../main/Logger';
+import {LogLevel} from '../main/LogLevel';
 
-describe('Logger.channel', () => {
-  it('accept functions', () => {
+describe('`Logger.channel`', () => {
 
-    const foo = record => record;
+  it('creates channel in logger when function processor is provided', () => {
     const logger = new Logger;
-    logger.appendChannel('foo', foo);
+    const processor = records => null;
 
-    expect(logger.channels).toEqual([{id: 'foo', processors: [foo]}]);
+    expect(logger.channel(LogLevel.TRACE, processor)).toBe(logger);
+
+    expect(logger.channels).toEqual([{
+      level: LogLevel.TRACE,
+      processors: [processor],
+      promise: null,
+      pendingCount: 0
+    }]);
   });
 
-  it('accept Loggers', done => {
+  it('creates channel in logger when object with `process` method is provided', done => {
+    const logger = new Logger;
+    const processor = records => done();
 
-    const foo = record => done();
-    const logger1 = new Logger;
-    const logger2 = new Logger;
-    logger1.appendChannel(logger2);
-    logger2.appendChannel('foo', foo);
+    expect(logger.channel(LogLevel.TRACE, processor)).toBe(logger);
+    logger.channels[0].processors[0]();
+  });
+});
 
-    logger1.log('bar');
+describe('`Logger.process`', () => {
+
+  it('returns `null` for synchronous processors', () => {
+    const trap = [];
+    const records = [{level: LogLevel.TRACE, messages: ['foo']}];
+    const logger = new Logger;
+    const processor = records => trap.push(...records);
+
+    logger.channel(LogLevel.TRACE, processor);
+
+    expect(logger.process(records)).toBeNull();
+    expect(trap).toEqual(records);
   });
 
-  it('asynchronous processor', done => {
+  it('returns `Promise` for asynchronous processors', async done => {
+    const trap = [];
+    const records = [{level: LogLevel.TRACE, messages: ['foo']}];
+    const logger = new Logger;
+    const processor = async records => {
+      await delay(100);
+      trap.push(...records);
+    };
 
-    const record = {level: Logger.ERROR, messages: []};
-    const foo = record => new Promise(resolve => setTimeout(resolve, 500, record));
-    const logger1 = new Logger;
-    const logger2 = new Logger;
-    logger1.appendChannel(logger2);
-    logger2.appendChannel('foo', foo);
+    logger.channel(LogLevel.TRACE, processor);
 
-    logger1.process(record).then(inboundRecord => {
-      expect(inboundRecord).toBe(record);
-      done();
-    });
+    const promise = logger.process(records);
+    expect(promise instanceof Promise).toBeTruthy();
+
+    expect(await promise).toBeNull();
+    expect(trap).toEqual(records);
+    done();
   });
+
 });

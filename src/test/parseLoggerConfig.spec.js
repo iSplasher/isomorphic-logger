@@ -1,6 +1,6 @@
 import {Logger} from "../main/Logger";
 import {parseLoggerConfig} from "../main/parseLoggerConfig";
-import {createConsoleWriter} from "../main/processors/createConsoleWriter";
+import {createConsoleAppender} from "../main/processors/createConsoleAppender";
 
 describe('parseLoggerConfig', () => {
   it('returns map of loggers', done => {
@@ -26,7 +26,7 @@ describe('parseLoggerConfig', () => {
     ],
     {
       foo: fooFactory,
-      writeToConsole: createConsoleWriter
+      writeToConsole: createConsoleAppender
     });
 
     const logger1 = loggers['logger1'];

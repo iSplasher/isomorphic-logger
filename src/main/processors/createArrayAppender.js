@@ -1,14 +1,7 @@
-/**
- * Creates log processor that pushes received records into an array.
- *
- * @param {Array} array
- */
-export function createArrayAppender(array) {
-  if (Array.isArray(array)) {
-    return record => {
-      array.push(record);
-      return record;
-    };
-  }
-  throw new Error('Expected an array to push records');
+export function createArrayAppender({array, limit = 100}) {
+  return records => {
+    array.push(...records);
+    array.splice(0, array.length - limit);
+    return records;
+  };
 }

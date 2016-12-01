@@ -1,20 +1,17 @@
-import util from 'util';
-import isObjectLike from 'lodash/isObjectLike';
+import objectInspect from "object-inspect";
 
 /**
- * Creates log processor that converts objects into string representation.
- * Should be used in node environment only.
+ * Converts object messages to stringified representation.
+ * @param {Number} [depth = 10] Object nesting depth.
  */
-export function createInspector(options) {
-  return ({level, messages}) => {
-
-    messages = messages.map(message => {
-      if (isObjectLike(message)) {
-        return util.inspect(message, options);
+export function createInspector({depth = 10}) {
+  return records => records.map(record => ({
+    ...record,
+    messages: record.messages.map(message => {
+      if (typeof message == 'object' || typeof message == 'function') {
+        return objectInspect(message, {depth});
       }
       return message;
-    });
-
-    return {level, messages};
-  };
+    })
+  }))
 }

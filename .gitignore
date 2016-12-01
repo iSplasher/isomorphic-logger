@@ -1,8 +1,7 @@
 ### Project
 
 ## Assembly target defined in Webpack config
-/client.js
-/server.js
+/index.js
 /processors
 
 
@@ -109,7 +108,7 @@ Temporary Items
 
 *~
 
-## Temporary files which can be created if a process still has a handle
+## Temporary files which can be created if a dispatch still has a handle
 ## open of a deleted file
 .fuse_hidden*
 

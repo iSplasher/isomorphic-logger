@@ -1,16 +1,18 @@
 /**
- * Creates log processor that converts all error objects in record messages
- * into their stack trace and crops excessive Webpack paths.
+ * Creates log processor that replaces error messages with their stack trace and crops excessive Webpack paths.
  */
-export function createStackTraceExtractor() {
-  return ({level, messages}) => {
-    messages = messages.map(message => {
-      if (message instanceof Error) {
-        return message.stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '');
-      }
-      return message;
-    });
-
-    return {level, messages};
+export function createStackTraceExtractor({
+    replacer = stack => stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
+}) {
+  return records => {
+    records.map(record => ({
+      ...record,
+      messages: record.messages.map(message => {
+        if (message instanceof Error) {
+          return replacer(message.stack);
+        }
+        return message;
+      })
+    }));
   };
 }

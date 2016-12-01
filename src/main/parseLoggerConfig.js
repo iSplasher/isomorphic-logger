@@ -14,7 +14,7 @@ export function parseLoggerConfig(config, processorFactories = {}) {
           // Reference to another logger in configuration.
           if (factory.indexOf('#') == 0) {
             const id = factory.substring(1);
-            processors.push(record => loggers[id].process(record));
+            processors.push(record => loggers[id].processRecord(record));
             continue;
           }
           factory = {id: factory};

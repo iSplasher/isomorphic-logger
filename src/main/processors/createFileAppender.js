@@ -1,38 +1,17 @@
 import fs from 'fs';
+import path from 'path';
 
-export function createFileAppender(path, {
-  bufferSize = 100,
-  timeout = 2000,
+export function createFileAppender({
+  filePath,
   encoding = 'utf8',
-  lineBreak = '\n'
+  lineBreak = '\n',
+  basedir = __dirname
 } = {}) {
-
-  const buffer = [];
-  let lastAppendTime = 0;
-  let timeoutId;
-
-  return ({level, messages}) => {
-    buffer.push(messages.join(' '));
-    clearTimeout(timeoutId);
-
-    if (buffer.length >= bufferSize || Date.now() - lastAppendTime > timeout) {
-      appendToFile();
-    } else {
-      timeoutId = setTimeout(appendToFile, timeout);
-    }
-
-    return {level, messages};
+  return records => {
+    fs.appendFile(path.resolve(basedir, filePath), records.join(lineBreak) + lineBreak, encoding, error => {
+      if (error) {
+        console.error(error);
+      }
+    });
   };
-
-  function appendToFile() {
-    lastAppendTime = Date.now();
-    if (buffer.length) {
-      fs.appendFile(path, buffer.join(lineBreak) + lineBreak, encoding, error => {
-        if (error) {
-          console.error(error);
-        }
-      });
-      buffer.length = 0;
-    }
-  }
 }

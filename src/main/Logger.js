@@ -1,140 +1,138 @@
-import isFunction from 'lodash/isFunction';
-import isString from 'lodash/isString';
-import flatten from 'lodash/flatten';
-import remove from 'lodash/remove';
+import {LogLevel} from './LogLevel';
 
 export class Logger {
-
-  static TRACE = 0;
-  static DEBUG = 1;
-  static INFO = 2;
-  static WARN = 3;
-  static ERROR = 4;
-  static OFF = 99;
-
-  level = Logger.TRACE;
 
   channels = [];
 
   /**
    * Creates logging channel that consists of a list of processors.
    *
-   * Processor is a function that accepts an object `{level, messages}` and returns a new object
-   * with the same structure for consequent processors to work with. If processor returns a promise
-   * then logging channel is suspended until this promise is resolved.
+   * Processor is a function that accepts an array of records `{level, messages}` and returns another
+   * array of records for consequent processors to work with. If processor returns a promise then logging
+   * channel is suspended until this promise is resolved.
    *
-   * Instead of a processor function another `Logger` instance can be provided.
+   * Instead of an object with `process` method can be provided.
    *
-   * @param {String} [id] Name of this channel. If channel with given name already exists in logger
-   *        it would be overwritten.
-   * @param {...(Function|Logger|Array.<Function|Logger>)} processors List of processors to add.
    * @returns {Logger}
    */
-  appendChannel(id, ...processors) {
-    const channel = {};
-
-    if (isString(id)) {
-      channel.id = id;
-      remove(this.channels, {id});
-    } else {
-      processors.unshift(id);
-    }
-
-    channel.processors = flatten(processors).map(processor => {
-      if (isFunction(processor)) {
+  channel(level, ...processors) {
+    processors = processors.map(processor => {
+      if (typeof processor == 'function') {
         return processor;
       }
-      if (processor instanceof Logger) {
-        // Processor should send data to another logger.
+      if (processor && processor.process) {
         return ::processor.process;
       }
-      throw new Error('Channel should contain function or Logger instances');
+      throw new Error('Processor should be a function or an object with `process` callback');
     });
 
-    if (channel.processors.length) {
-      this.channels.push(channel);
-    }
+    this.channels.push({level, processors, promise: null, pendingCount: 0});
     return this;
   }
 
   /**
-   * Processes record via sending its messages to channels defined for this logger
-   * and it child loggers if record level is sufficient.
+   * Process records through pipeline.
    *
-   * @returns {Promise} Promise that resolves with originally provided record after
-   *          all channels complete their work.
+   * @param {Array} records
+   * @return {Promise|null}
    */
-  process(record) {
-    if (record.level < this.level) {
-      // Insufficient logging level requested.
-      return Promise.resolve(record);
-    }
-    const futures = [];
-    for (const {processors} of this.channels) {
-      let payload = {...record};
+  process(records) {
+    const promises = [];
 
-      for (const processor of processors) {
-        if (payload instanceof Promise) {
-          // Enqueue asynchronous processors and ensure they do nothing if
-          // preceding processor did not return record object.
-          payload = payload.then(record => record && processor(record));
-        } else {
-          payload = processor(payload);
-          if (!payload) {
-            // Synchronous record processing was interrupted.
-            break;
+    for (const channel of this.channels) {
+      let value = records.filter(record => record.level >= channel.level);
+
+      if (value.length) {
+        if (channel.pendingCount > 0) {
+          value = Promise.resolve(value);
+        }
+        for (const processor of channel.processors) {
+          if (value instanceof Promise) {
+            value = value.then(records => records && processor(records));
+          } else {
+            value = processor(value);
+            if (!value) {
+              break;
+            }
           }
         }
+        if (value instanceof Promise) {
+          const decrease = () => {channel.pendingCount -= 1};
+
+          value = value.then(decrease, error => {
+            console.log(error);
+            decrease();
+          });
+
+          if (channel.pendingCount > 0) {
+            channel.promise = channel.promise.then(() => value);
+          } else {
+            channel.promise = value;
+          }
+          channel.pendingCount += 1;
+        }
       }
-      if (payload instanceof Promise) {
-        futures.push(payload);
+
+      if (channel.pendingCount > 0) {
+        promises.push(channel.promise);
       }
     }
-    return Promise.all(futures).then(() => record);
+    if (promises.length) {
+      return Promise.all(promises).then(() => null);
+    }
+    return null;
+  }
+
+  /**
+   * Send messages to channels of this logger.
+   *
+   * @param {Number} level Level to log provided messages with.
+   * @param {Array} messages Messages to pass to processors.
+   * @param {Object} [meta] Any additional meta passed to processors.
+   *
+   * @returns {Promise} Promise that resolves when all channels did process provided messages.
+   */
+  log(level, messages, meta) {
+    return this.process([{level, messages, meta}]);
   }
 
   isTraceEnabled() {
-    return this.level >= Logger.TRACE;
+    return this.level >= LogLevel.TRACE;
   }
 
   isDebugEnabled() {
-    return this.level >= Logger.DEBUG;
+    return this.level >= LogLevel.DEBUG;
   }
 
   isInfoEnabled() {
-    return this.level >= Logger.INFO;
+    return this.level >= LogLevel.INFO;
   }
 
   isWarnEnabled() {
-    return this.level >= Logger.WARN;
+    return this.level >= LogLevel.WARN;
   }
 
   isErrorEnabled() {
-    return this.level >= Logger.ERROR;
+    return this.level >= LogLevel.ERROR;
   }
 
   trace(...messages) {
-    return this.process({level: Logger.TRACE, messages});
+    return this.log(LogLevel.TRACE, messages);
   }
 
   debug(...messages) {
-    return this.process({level: Logger.DEBUG, messages});
-  }
-
-  // Convenient alias
-  log() {
-    return this.info.apply(this, arguments);
+    return this.log(LogLevel.DEBUG, messages);
   }
 
   info(...messages) {
-    return this.process({level: Logger.INFO, messages});
+    return this.log(LogLevel.INFO, messages);
   }
 
   warn(...messages) {
-    return this.process({level: Logger.WARN, messages});
+    return this.log(LogLevel.WARN, messages);
   }
 
   error(...messages) {
-    return this.process({level: Logger.ERROR, messages});
+    return this.log(LogLevel.ERROR, messages);
   }
 }

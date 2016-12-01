@@ -5,6 +5,11 @@
     "stage-0"
   ],
   "plugins": [
+    "transform-regenerator",
+    [
+      "transform-runtime",
+      {"regenerator": true}
+    ],
     [
       "transform-es2015-for-of",
       {"loose": true}
