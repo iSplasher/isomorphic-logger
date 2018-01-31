@@ -1,8 +1,19 @@
+// @flow
+import type {Channel, LoggerLogLevel, LogResult, Processor, Record} from './types/LoggerType';
 import {LogLevel} from './LogLevel';
+
+// TODO: make sure everything works
+// TODO: write tests
+// TODO: remove webpack, use babel (like in __client-shared__)
+// TODO: parseLoggerConfig - write
+// TODO: remove arrayAppender
+// TODO: ignore fileAppender
+// TODO: ignore rollingFileAppender
+// TODO: flow
 
 export class Logger {
 
-  channels = [];
+  channels: Channel[] = [];
 
   /**
    * Creates logging channel that consists of a list of processors.
@@ -15,9 +26,9 @@ export class Logger {
    *
    * @returns {Logger}
    */
-  channel(level, ...processors) {
+  channel(level: LoggerLogLevel, ...processors: Processor[]): this {
     processors = processors.map(processor => {
-      if (typeof processor == 'function') {
+      if (typeof processor === 'function') {
         return processor;
       }
       if (processor && processor.process) {
@@ -36,7 +47,7 @@ export class Logger {
    * @param {Array} records
    * @return {Promise|null}
    */
-  process(records) {
+  process(records: Record[]): LogResult {
     const promises = [];
 
     for (const channel of this.channels) {
@@ -83,6 +94,8 @@ export class Logger {
     return null;
   }
 
+
+
   /**
    * Send messages to channels of this logger.
    *
@@ -92,47 +105,48 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  log(level, messages, meta) {
+  log(level: LoggerLogLevel, messages: Record[], meta: *): LogResult {
     return this.process([{level, messages, meta}]);
   }
 
-  isTraceEnabled() {
+  // TODO: this.level no longer lives in Logger instance right?
+  /*isTraceEnabled(): boolean {
     return this.level >= LogLevel.TRACE;
   }
 
-  isDebugEnabled() {
+  isDebugEnabled(): boolean {
     return this.level >= LogLevel.DEBUG;
   }
 
-  isInfoEnabled() {
+  isInfoEnabled(): boolean {
     return this.level >= LogLevel.INFO;
   }
 
-  isWarnEnabled() {
+  isWarnEnabled(): boolean {
     return this.level >= LogLevel.WARN;
   }
 
-  isErrorEnabled() {
+  isErrorEnabled(): boolean {
     return this.level >= LogLevel.ERROR;
-  }
+  }*/
 
-  trace(...messages) {
+  trace(...messages: *): LogResult {
     return this.log(LogLevel.TRACE, messages);
   }
 
-  debug(...messages) {
+  debug(...messages: *): LogResult {
     return this.log(LogLevel.DEBUG, messages);
   }
 
-  info(...messages) {
+  info(...messages: *): LogResult {
     return this.log(LogLevel.INFO, messages);
   }
 
-  warn(...messages) {
+  warn(...messages: *): LogResult {
     return this.log(LogLevel.WARN, messages);
   }
 
-  error(...messages) {
+  error(...messages: *): LogResult {
     return this.log(LogLevel.ERROR, messages);
   }
 }

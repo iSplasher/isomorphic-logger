@@ -1,7 +1,8 @@
+import type {Processor, Record} from '../types/LoggerType';
 import {LogLevel} from '../LogLevel';
 
-export function createConsoleAppender() {
-  return records => {
+export function createConsoleAppender(): Processor {
+  return (records: Record[]) => {
     for (const {level, messages} of records) {
       switch (level) {
 

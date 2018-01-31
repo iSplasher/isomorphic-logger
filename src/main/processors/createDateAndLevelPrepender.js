@@ -1,8 +1,11 @@
+import type {Processor, Record} from '../types/LoggerType';
 import padStart from "lodash/padStart";
-import {Logger} from "../Logger";
+import {LogLevel} from '../LogLevel';
 
-export function createDateAndLevelPrepender() {
-  return records => records.map(record => {
+// TODO: refactor, use moment?
+
+export function createDateAndLevelPrepender(): Processor {
+  return (records: Record[]) => records.map(record => {
     record = {...record, messages: [...record.messages]};
     const date = new Date;
 
@@ -14,11 +17,11 @@ export function createDateAndLevelPrepender() {
         padStart(date.getMinutes(), 2, '0') + ':' +
         padStart(date.getSeconds(), 2, '0'),
 
-        level == Logger.DEBUG ? 'DEBUG' :
-            level == Logger.ERROR ? 'ERROR' :
-                level == Logger.INFO ? 'INFO' :
-                    level == Logger.TRACE ? 'TRACE' :
-                        level == Logger.WARN ? 'WARN' :
+        level === LogLevel.DEBUG ? 'DEBUG' :
+            level === LogLevel.ERROR ? 'ERROR' :
+                level === LogLevel.INFO ? 'INFO' :
+                    level === LogLevel.TRACE ? 'TRACE' :
+                        level === LogLevel.WARN ? 'WARN' :
                             level
     );
 

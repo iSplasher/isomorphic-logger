@@ -1,7 +1,8 @@
+import type {ProcessorFactoryMap} from './types/LoggerType';
 import isString from 'lodash/isString';
 import {Logger} from './Logger';
 
-export function parseLoggerConfig(config, processorFactories = {}) {
+export function parseLoggerConfig(config: {}, processorFactories: ProcessorFactoryMap = {}) {
   const loggers = {};
   for (const {id, channels} of config) {
     const logger = new Logger;
@@ -12,9 +13,9 @@ export function parseLoggerConfig(config, processorFactories = {}) {
       for (let factory of factories) {
         if (isString(factory)) {
           // Reference to another logger in configuration.
-          if (factory.indexOf('#') == 0) {
+          if (factory.indexOf('#') === 0) {
             const id = factory.substring(1);
-            processors.push(record => loggers[id].processRecord(record));
+            processors.push(record => loggers[id].process(record));
             continue;
           }
           factory = {id: factory};
@@ -28,9 +29,9 @@ export function parseLoggerConfig(config, processorFactories = {}) {
       }
 
       if (isString(id)) {
-        logger.appendChannel(id, processors);
+        logger.channel(id, processors);
       } else {
-        logger.appendChannel(processors);
+        logger.channel(processors);
       }
     }
     loggers[id] = logger;

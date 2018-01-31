@@ -1,4 +1,4 @@
-import {createAggregator} from '../main/processors/createAggregator';
+import {createAggregator} from '../../main/processors/createAggregator';
 
 describe('`createAggregator`', () => {
 

@@ -1,4 +1,4 @@
-import {createThrottle} from '../main/processors/createThrottle';
+import {createThrottle} from '../../main/processors/createThrottle';
 
 describe('`createThrottle`', () => {
 

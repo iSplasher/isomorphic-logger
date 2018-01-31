@@ -1,10 +1,12 @@
+import type {Processor} from '../types/LoggerType';
+import type {FileAppenderOptions} from './___createFileAppender.disabled';
 import fs from 'fs';
-import {createFileAppender} from './createFileAppender';
+import {createFileAppender} from './___createFileAppender.disabled';
 
-export function createRollingFileAppender(path, {
+export function createRollingFileAppender(path: string, {
   maxFileSize = 102400,
   ...fileAppenderOptions
-} = {}) {
+}: FileAppenderOptions = {}): Processor {
   const fileAppender = createFileAppender(path, fileAppenderOptions);
 
   let index = 1;
