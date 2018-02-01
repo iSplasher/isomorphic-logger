@@ -1,7 +1,7 @@
 /**
  * Creates log processor that replaces error messages with their stack trace and crops excessive Webpack paths.
  */
-import type {Processor, Record} from '../types/LoggerType';
+import type {Processor, Record} from '../types/ProcessorType';
 
 export type Replacer = (stack: string) => string;
 

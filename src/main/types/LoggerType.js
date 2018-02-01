@@ -1,31 +1,21 @@
+// @flow
+import type {Processor} from './ProcessorType';
+
 export type LoggerLogLevel = number;
 
-export type Record = {
-  level: LoggerLogLevel;
-  messages: Array<*>;
-  meta: *;
+export type Logger = {
+  error(...messages: *): *;
+  trace(...messages: *): *;
+  debug(...messages: *): *;
+  info(...messages: *): *;
+  warn(...messages: *): *;
 };
 
-export type Processor = (records: Record<>) => ProcessorResult | {
-  process(records: Record<>): ProcessorResult;
-};
-
-export type ProcessorResult = Record<> | Promise;
-
-export type ProcessorCreator = (...args: *) => Processor;
-
-export type ProcessorFactoryMap = {
-  [processorName: string]: ProcessorCreator
-};
-
-export type LogResult = Promise | null;
-
-export type Channel = {
+export type LoggerChannel = {
   level: LoggerLogLevel;
   processors: Processor[];
-  promise: Promise | null;
+  promise: Promise<*> | null;
   pendingCount: number;
 };
 
-// TODO: LoggerConfig
-//export type LoggerConfig = {};
+export type LogResult = Promise<*> | null;

@@ -1,27 +1,46 @@
-// @flow
-
-//import {parseLoggerConfig} from './parseLoggerConfig';
 import {PROCESSOR_FACTORIES} from './index';
-import {ProcessorFactoryMap} from './types/LoggerType';
+import {parseLoggersConfig} from './parseLoggersConfig';
 
-const loggerConfig = {
-  level: 'DEBUG',
-  processors: [
-    [
-      {type: 'aggregate', options: {timeout: 1000}},
-      {type: 'console'},
-      {type: 'logger', options: {
-        level: 'INFO',
-        processors: [
-          {type: 'logsConcatenator'}
-        ]
-      }}
-    ]
+console.debug = console.log;
+
+const loggersConfig = [{
+  id: 'globalLogger',
+  channels: [
+    {
+      level: 'DEBUG',
+      processors: [
+        {type: 'inspector', options: {depth: 10}},
+        {type: 'consoleAppender'},
+        {type: 'logger', options: {
+          channels: [{
+            level: 'INFO',
+            processors: [
+              {type: 'inspector', options: {depth: 10}},
+              {type: 'consoleAppender'}
+            ]
+          }]}
+        }
+      ]
+    },
+    {
+      level: 'INFO',
+      processors: [
+        {
+          type: 'logger',
+          options: {
+            level: 'WARN',
+            channels: [
+              [
+                {type: 'inspector', options: {depth: 10}},
+                {type: 'consoleAppender'}
+              ]
+            ]
+          }
+        }
+      ]
+    }
   ]
-};
+}];
 
-function parseLoggerConfig(loggerConfig: {}, processorFactories: ProcessorFactoryMap) {
-  //function createLogger
-}
-
-const loggers = parseLoggerConfig(loggerConfig, PROCESSOR_FACTORIES);
+const {globalLogger} = parseLoggersConfig(loggersConfig, PROCESSOR_FACTORIES);
+globalLogger.debug(globalLogger);

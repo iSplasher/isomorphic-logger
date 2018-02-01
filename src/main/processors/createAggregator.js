@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../types/LoggerType';
+import type {Processor, Record} from '../types/ProcessorType';
 
 type AggregatorPredicate = (records: Record[], dispatch: ?Function) => boolean;
 

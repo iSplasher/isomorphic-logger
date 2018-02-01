@@ -1,19 +1,21 @@
-import type {Processor, Record} from '../types/LoggerType';
+import type {Processor, Record} from '../types/ProcessorType';
 import {LogLevel} from '../LogLevel';
 
-export type RavenApi = {
+// TODO: move to types folder
+// TODO: what to do with es6 node_modules?
+export type SentryAdapter = {
   captureMessage(message: *, options: *): *;
   captureException(message: *, options: *): *;
 };
 
-export function createSentryLogger(Raven: RavenApi): Processor {
+export function createSentryLogger(sentryAdapter: SentryAdapter): Processor {
   return (records: Record[]) => {
     records.forEach(({level, messages, meta}) => {
       const [message] = messages;
       if (level < LogLevel.ERROR) {
-        Raven.captureMessage(message, {level: level < LogLevel.WARN ? 'info' : 'warn', meta});
+        sentryAdapter.captureMessage(message, {level: level < LogLevel.WARN ? 'info' : 'warn', meta});
       } else {
-        Raven.captureException(message, {level: 'error', meta});
+        sentryAdapter.captureException(message, {level: 'error', meta});
       }
     });
     return records;

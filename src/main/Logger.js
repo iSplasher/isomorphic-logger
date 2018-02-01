@@ -1,19 +1,15 @@
-// @flow
-import type {Channel, LoggerLogLevel, LogResult, Processor, Record} from './types/LoggerType';
+import type {LoggerLogLevel, LoggerChannel, LogResult} from './types/LoggerType'
+import type {Processor, Record} from './types/ProcessorType';
 import {LogLevel} from './LogLevel';
 
-// TODO: make sure everything works
-// TODO: write tests
-// TODO: remove webpack, use babel (like in __client-shared__)
-// TODO: parseLoggerConfig - write
-// TODO: remove arrayAppender
-// TODO: ignore fileAppender
-// TODO: ignore rollingFileAppender
-// TODO: flow
+// TODO: flow - fix last errors?
+// TODO: Sentry - es6 module and processors
+// TODO: web - finish moving logger, create config
+// TODO: android - finish moving logger, create config
 
 export class Logger {
 
-  channels: Channel[] = [];
+  channels: LoggerChannel[] = [];
 
   /**
    * Creates logging channel that consists of a list of processors.
@@ -51,7 +47,7 @@ export class Logger {
     const promises = [];
 
     for (const channel of this.channels) {
-      let value = records.filter(record => record.level >= channel.level);
+      let value: Record[] = records.filter(record => record.level >= channel.level);
 
       if (value.length) {
         if (channel.pendingCount > 0) {
@@ -75,7 +71,7 @@ export class Logger {
             decrease();
           });
 
-          if (channel.pendingCount > 0) {
+          if (channel.pendingCount > 0 && channel.promise instanceof Promise) {
             channel.promise = channel.promise.then(() => value);
           } else {
             channel.promise = value;
@@ -94,8 +90,6 @@ export class Logger {
     return null;
   }
 
-
-
   /**
    * Send messages to channels of this logger.
    *
@@ -105,30 +99,9 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  log(level: LoggerLogLevel, messages: Record[], meta: *): LogResult {
+  log(level: LoggerLogLevel, messages: Array<*>, meta: *): LogResult {
     return this.process([{level, messages, meta}]);
   }
-
-  // TODO: this.level no longer lives in Logger instance right?
-  /*isTraceEnabled(): boolean {
-    return this.level >= LogLevel.TRACE;
-  }
-
-  isDebugEnabled(): boolean {
-    return this.level >= LogLevel.DEBUG;
-  }
-
-  isInfoEnabled(): boolean {
-    return this.level >= LogLevel.INFO;
-  }
-
-  isWarnEnabled(): boolean {
-    return this.level >= LogLevel.WARN;
-  }
-
-  isErrorEnabled(): boolean {
-    return this.level >= LogLevel.ERROR;
-  }*/
 
   trace(...messages: *): LogResult {
     return this.log(LogLevel.TRACE, messages);

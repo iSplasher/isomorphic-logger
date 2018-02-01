@@ -1,4 +1,4 @@
-import {Processor, Record} from '../types/LoggerType';
+import {Processor, Record} from '../types/ProcessorType';
 import fs from 'fs';
 import path from 'path';
 

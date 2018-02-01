@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../types/LoggerType';
+import type {Processor, Record} from '../types/ProcessorType';
 import padStart from "lodash/padStart";
 import {LogLevel} from '../LogLevel';
 

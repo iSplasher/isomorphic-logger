@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../types/LoggerType';
+import type {Processor, Record} from '../types/ProcessorType';
 import safeJsonStringify from 'safe-json-stringify';
 
 export type LogStringifier = (log: *, charLimit: number) => string;

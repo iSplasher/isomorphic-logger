@@ -1,4 +1,4 @@
-import type {Processor} from '../types/LoggerType';
+import type {Processor} from '../types/ProcessorType';
 import type {FileAppenderOptions} from './___createFileAppender.disabled';
 import fs from 'fs';
 import {createFileAppender} from './___createFileAppender.disabled';
