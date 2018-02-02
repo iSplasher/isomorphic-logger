@@ -1,6 +1,7 @@
 const {
   exec,
   build,
+  cd,
   lifecycle,
   isPushEventBuild,
   gitPush,
@@ -11,14 +12,19 @@ const {
 build({
   ...lifecycle,
   publish() {
-    exec("echo 'publish begin'")
     if (isPushEventBuild()) {
-      exec("echo 'push event!'");
-      exec("ls -la")
-      exec("echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'");
-      exec("ls -la ./target/out");
-      //gitPush();
-      //npmPublish(resolveNpmTag(), './target/out');
+      gitPush();
+      const dir = './target/out';
+      const curDir = process.cwd();
+      if (dir) {
+        exec('echo "copying "');
+        exec(`cp README.md LICENSE package.json ${dir}`);
+        cd(dir);
+        exec('echo "changed directory"');
+      }
+      
+      exec(`npm publish --tag=${tag}`);
+      cd(curDir);
     }
   }
 });
