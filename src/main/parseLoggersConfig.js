@@ -2,6 +2,7 @@ import type {LoggerConfigChannel, LoggerConfigParserResult, LoggersConfig} from 
 import type {ProcessorFactories} from './types/ProcessorType';
 import {Logger} from './Logger';
 import {LogLevel} from './LogLevel';
+import {PROCESSOR_FACTORIES} from './index';
 
 export function createLoggerFromConfig(
   channels: LoggerConfigChannel[],
@@ -30,7 +31,7 @@ export function createLoggerFromConfig(
 
 export function parseLoggersConfig(
   loggersConfig: LoggersConfig,
-  processorFactories: ProcessorFactories = {},
+  processorFactories: ProcessorFactories = PROCESSOR_FACTORIES,
   loggerCreator = createLoggerFromConfig
 ): LoggerConfigParserResult {
   const loggers = {};
