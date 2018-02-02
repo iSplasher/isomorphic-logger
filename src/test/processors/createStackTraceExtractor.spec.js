@@ -9,10 +9,17 @@ describe(`createStackTraceExtractor`, () => {
   });
 
   it(`replaces Error with string and passes Error.stack to a replacer`, () => {
-    const replacer = () => 'foo stack';
+    const approver = jest.fn();
+    const replacer = (stack) => {
+      if (typeof stack === 'string') {
+        approver();
+      }
+      return 'foo stack';
+    };
     const stackTraceExtractor = createStackTraceExtractor({replacer});
     const records = stackTraceExtractor([{messages: [new Error]}]);
     const [error] = records[0].messages;
+    expect(approver.mock.calls.length).toBe(1);
     expect(error).toBe('foo stack');
   });
 });
