@@ -1,4 +1,5 @@
 const {
+  exec,
   build,
   lifecycle,
   isPushEventBuild,
