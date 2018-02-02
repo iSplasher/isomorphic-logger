@@ -3,14 +3,18 @@
  */
 import type {Processor, Record} from '../types/ProcessorType';
 
-export type Replacer = (stack: string) => string;
+export type StringReplacer = (stack: string) => string;
 
 export type StackTraceExtractorOptions = {
-  replacer: Replacer
+  replacer: StringReplacer
 };
 
+function webpackStackCleaner(stack) {
+   return stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
+}
+
 export function createStackTraceExtractor({
-    replacer = stack => stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
+    replacer = webpackStackCleaner
 }: StackTraceExtractorOptions): Processor {
   return (records: Record[]) => records.map(record => ({
     ...record,

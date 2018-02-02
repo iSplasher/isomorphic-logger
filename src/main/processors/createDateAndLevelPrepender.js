@@ -1,28 +1,29 @@
 import type {Processor, Record} from '../types/ProcessorType';
 import padStart from "lodash/padStart";
 import {LogLevel} from '../LogLevel';
+import moment from 'moment';
 
 // TODO: refactor, use moment?
+// TODO: pass format as an option?
 
-export function createDateAndLevelPrepender(): Processor {
+export function getLogLevelName(level) {
+  return level === LogLevel.DEBUG ? 'DEBUG' :
+         level === LogLevel.ERROR ? 'ERROR' :
+         level === LogLevel.INFO ? 'INFO' :
+         level === LogLevel.TRACE ? 'TRACE' :
+         level === LogLevel.WARN ? 'WARN' :
+         level;
+}
+export function createDateAndLevelPrepender({
+  dateFormat = 'YYYY-MM-DD HH:MM:SS'
+} = {}): Processor {
   return (records: Record[]) => records.map(record => {
     record = {...record, messages: [...record.messages]};
-    const date = new Date;
+    const {messages, level} = record;
 
-    record.messages.unshift(
-        date.getFullYear() + '-' +
-        padStart(date.getMonth() + 1, 2, '0') + '-' +
-        padStart(date.getDate(), 2, '0') + ' ' +
-        padStart(date.getHours(), 2, '0') + ':' +
-        padStart(date.getMinutes(), 2, '0') + ':' +
-        padStart(date.getSeconds(), 2, '0'),
-
-        level === LogLevel.DEBUG ? 'DEBUG' :
-            level === LogLevel.ERROR ? 'ERROR' :
-                level === LogLevel.INFO ? 'INFO' :
-                    level === LogLevel.TRACE ? 'TRACE' :
-                        level === LogLevel.WARN ? 'WARN' :
-                            level
+    messages.unshift(
+        getLogLevelName(level),
+        moment().format(dateFormat)
     );
 
     return record;

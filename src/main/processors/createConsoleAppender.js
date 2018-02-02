@@ -14,6 +14,13 @@ export function createConsoleAppender(): Processor {
           }
           break;
 
+        case LogLevel.INFO:
+          if (console.info) {
+            console.info(...messages);
+            return;
+          }
+          break;
+
         case LogLevel.WARN:
           if (console.warn) {
             console.warn(...messages);

@@ -2,8 +2,10 @@ import type {LoggerLogLevel, LoggerChannel, LogResult} from './types/LoggerType'
 import type {Processor, Record} from './types/ProcessorType';
 import {LogLevel} from './LogLevel';
 
-// TODO: flow - fix last errors?
-// TODO: Sentry - es6 module and processors
+// TODO: Help Needed: flow - errors
+// TODO: Help Needed: Sentry - react-native has es6 in node_modules
+// TODO: Help Needed: Logger.level doesn't exist anymore?
+// TODO: tests
 // TODO: web - finish moving logger, create config
 // TODO: android - finish moving logger, create config
 
