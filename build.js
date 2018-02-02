@@ -22,8 +22,9 @@ build({
         cd(dir);
         exec('echo "changed directory"');
       }
-      
-      exec(`npm publish --tag=${tag}`);
+      exec("echo '=========== current dir'")
+      exec('ls -la');
+      exec(`npm publish --tag=${resolveNpmTag()}`);
       cd(curDir);
     }
   }
