@@ -9,8 +9,7 @@ import {createStackTraceExtractor} from './processors/createStackTraceExtractor'
 import {createThrottle} from './processors/createThrottle';
 import {createErrorWrapper} from './processors/createErrorWrapper';
 import {createLogsConcatenator} from './processors/createLogsConcatenator';
-//import {createSentryWebLogger} from './processors/createSentryWebLogger';
-//import {createSentryNodeLogger} from './processors/createSentryNodeLogger';
+import {createSentryWebLogger} from './processors/createSentryWebLogger';
 
 export {Logger, Logger as default};
 export {LogLevel} from './LogLevel';
@@ -24,8 +23,7 @@ export {createStackTraceExtractor};
 export {createThrottle};
 export {createErrorWrapper};
 export {createLogsConcatenator};
-//export {createSentryWebLogger};
-//export {createSentryNodeLogger};
+export {createSentryWebLogger};
 
 export const PROCESSOR_FACTORIES = {
   logger: Logger,
@@ -38,6 +36,5 @@ export const PROCESSOR_FACTORIES = {
   throttle: createThrottle,
   errorWrapper: createErrorWrapper,
   logsConcatenator: createLogsConcatenator,
-  //sentryWebLogger: createSentryWebLogger,
-  //sentryNodeLogger: createSentryNodeLogger
+  sentryWebLogger: createSentryWebLogger
 };
