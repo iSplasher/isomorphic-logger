@@ -14,7 +14,12 @@
     "debug"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "client.js",
+  "files": [
+    "src/main/",
+    "client.js",
+    "server.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Grabr/isomorphic-logger.git"
@@ -36,7 +41,7 @@
       "<rootDir>/node_modules/"
     ]
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/cli": "7.0.0-beta.34",
     "@babel/core": "7.0.0-beta.34",
     "@babel/plugin-transform-regenerator": "7.0.0-beta.34",
@@ -59,10 +64,7 @@
     "moment": "2.20.1",
     "object-inspect": "",
     "safe-json-stringify": "^1.0.4",
-    "stacktrace-js": "^2.0.0"
-  },
-  "dependencies": {
-    "@babel/runtime": "7.0.0-beta.34",
+    "stacktrace-js": "^2.0.0",
     "lodash": ""
   }
 }
