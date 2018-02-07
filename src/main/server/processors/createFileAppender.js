@@ -1,13 +1,7 @@
-import {Processor, Record} from '../types/ProcessorType';
+import type {Processor, Record} from '../../types/ProcessorType';
+import type {FileAppenderOptions} from '../../types/server/processors/FileAppenderType';
 import fs from 'fs';
 import path from 'path';
-
-export type FileAppenderOptions = {
-  filePath: string;
-  encoding: string;
-  lineBreak: string;
-  basedir: string;
-};
 
 export function createFileAppender({
   filePath,

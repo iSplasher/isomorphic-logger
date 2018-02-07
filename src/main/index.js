@@ -3,7 +3,7 @@ import {parseLoggersConfig} from './parseLoggersConfig';
 import {createAggregator} from './processors/createAggregator';
 import {createConsoleAppender} from './processors/createConsoleAppender';
 import {createDateAndLevelPrepender} from './processors/createDateAndLevelPrepender';
-import {createHighlighter} from './processors/createHighlighter';
+import {createHighlighter} from './server/processors/createHighlighter';
 import {createInspector} from './processors/createInspector';
 import {createStackTraceExtractor} from './processors/createStackTraceExtractor';
 import {createThrottle} from './processors/createThrottle';
