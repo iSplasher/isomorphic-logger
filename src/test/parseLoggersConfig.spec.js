@@ -50,7 +50,7 @@ describe('createLoggerFromConfig', () => {
   it(`invokes processor creator with options`, () => {
     const processorCreator = jest.fn();
     createLoggerFromConfig([{
-      level: 'INFO',
+      level: 'TRACE',
       processors: [{
         type: 'foo',
         options: {

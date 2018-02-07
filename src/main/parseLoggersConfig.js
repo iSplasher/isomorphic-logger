@@ -10,7 +10,7 @@ export function createLoggerFromConfig(
 ) {
   const logger = new Logger();
   for (const channel of channels) {
-    if (!LogLevel[channel.level]) {
+    if (LogLevel[channel.level] === undefined) {
       throw new Error(`Unknown log level "${channel.level}"`);
     }
     const createdProcessors = [];
