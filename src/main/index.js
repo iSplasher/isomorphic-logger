@@ -3,7 +3,6 @@ import {parseLoggersConfig} from './parseLoggersConfig';
 import {createAggregator} from './processors/createAggregator';
 import {createConsoleAppender} from './processors/createConsoleAppender';
 import {createDateAndLevelPrepender} from './processors/createDateAndLevelPrepender';
-import {createHighlighter} from './server/processors/createHighlighter';
 import {createInspector} from './processors/createInspector';
 import {createStackTraceExtractor} from './processors/createStackTraceExtractor';
 import {createThrottle} from './processors/createThrottle';
@@ -16,7 +15,6 @@ export {parseLoggersConfig};
 export {createAggregator};
 export {createConsoleAppender};
 export {createDateAndLevelPrepender};
-export {createHighlighter};
 export {createInspector};
 export {createStackTraceExtractor};
 export {createThrottle};
@@ -29,7 +27,6 @@ export const PROCESSOR_FACTORIES = {
   aggregator: createAggregator,
   consoleAppender: createConsoleAppender,
   dateAndLevelPrepender: createDateAndLevelPrepender,
-  highlighter: createHighlighter,
   inspector: createInspector,
   stackTraceExtractor: createStackTraceExtractor,
   throttle: createThrottle,
