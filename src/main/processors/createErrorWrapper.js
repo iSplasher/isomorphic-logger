@@ -1,24 +1,8 @@
 import type {Processor, Record} from '../types/ProcessorType';
 import type {LoggerLogLevel} from '../types/LoggerType';
+import type {ErrorWrapperOptions, StackFrame} from '../types/processors/ErrorWrapperType';
 import {LogLevel} from '../LogLevel';
 import StackTrace from 'stacktrace-js';
-
-export type MessageTester = (message: *, level: LoggerLogLevel, i: number) => boolean;
-
-export type StackTraceCreator = (errorType: string, errorMessage: string, stackFrames: StackFrame[]) => string;
-
-export type StackFrame = {
-  fileName: string;
-  lineNumber: number;
-  columnNumber: number;
-  functionName: string;
-};
-
-export type ErrorWrapperOptions = {
-  trimHeadFrames: number;
-  testMessage: MessageTester;
-  createStackTrace: StackTraceCreator;
-};
 
 export function createErrorWrapper({
   trimHeadFrames = 0,

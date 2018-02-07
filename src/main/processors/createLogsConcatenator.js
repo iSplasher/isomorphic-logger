@@ -1,11 +1,6 @@
 import type {Processor, Record} from '../types/ProcessorType';
+import type {LogsConcatenatorOptions} from '../types/processors/LogsConcatenatorType';
 import safeJsonStringify from 'safe-json-stringify';
-
-export type LogStringifier = (log: *, charLimit: number) => string;
-
-export type LogsConcatenatorOptions = {
-  stringifyLoggedValue: LogStringifier;
-};
 
 export function createLogsConcatenator({
   stringifyLoggedValue = stringifyLog

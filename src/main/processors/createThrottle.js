@@ -1,11 +1,6 @@
 import type {Processor, Record} from '../types/ProcessorType';
+import type {ThrottlerOptions} from '../types/processors/ThrottlerType';
 import {createAggregator} from "./createAggregator";
-
-export type ThrottlerOptions = {
-  delay: number;
-  length: number;
-  leading: boolean;
-};
 
 export function createThrottle({
   delay = 1000,

@@ -2,12 +2,7 @@
  * Creates log processor that replaces error messages with their stack trace and crops excessive Webpack paths.
  */
 import type {Processor, Record} from '../types/ProcessorType';
-
-export type StringReplacer = (stack: string) => string;
-
-export type StackTraceExtractorOptions = {
-  replacer: StringReplacer
-};
+import type {StackTraceExtractorOptions} from '../types/processors/StackTraceExtractorType';
 
 function webpackStackCleaner(stack) {
    return stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
@@ -15,7 +10,7 @@ function webpackStackCleaner(stack) {
 
 export function createStackTraceExtractor({
     replacer = webpackStackCleaner
-}: StackTraceExtractorOptions): Processor {
+}: StackTraceExtractorOptions = {}): Processor {
   return (records: Record[]) => records.map(record => ({
     ...record,
     messages: record.messages.map(message => {

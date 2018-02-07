@@ -1,10 +1,5 @@
-import type {Processor, Record} from '../types/ProcessorType';
-
-type AggregatorPredicate = (records: Record[], dispatch: ?Function) => boolean;
-
-type AggregatorOptions = {
-  predicate: AggregatorPredicate;
-};
+import type {Processor} from '../types/ProcessorType';
+import type {AggregatorOptions} from '../types/processors/AggregatorType';
 
 export function createAggregator({predicate}: AggregatorOptions): Processor {
   let resolve;

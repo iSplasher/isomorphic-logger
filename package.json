@@ -21,6 +21,7 @@
   "bugs": {
     "url": "https://github.com/Grabr/isomorphic-logger/issues"
   },
+  "main": "index.js",
   "homepage": "https://github.com/Grabr/isomorphic-logger",
   "scripts": {
     "build": "rm -rf target/out; NODE_ENV=production babel src/main -d target/out",
@@ -59,6 +60,6 @@
     "object-inspect": "",
     "safe-json-stringify": "^1.0.4",
     "stacktrace-js": "^2.0.0",
-    "lodash": ""
+    "lodash": "^4.17.5"
   }
 }

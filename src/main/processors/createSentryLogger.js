@@ -1,12 +1,6 @@
 import type {Processor, Record} from '../types/ProcessorType';
+import type {SentryAdapter} from '../types/processors/SentryType';
 import {LogLevel} from '../LogLevel';
-
-// TODO: move to types folder
-// TODO: what to do with es6 node_modules?
-export type SentryAdapter = {
-  captureMessage(message: *, options: *): *;
-  captureException(message: *, options: *): *;
-};
 
 export function createSentryLogger(sentryAdapter: SentryAdapter): Processor {
   return (records: Record[]) => {

@@ -1,10 +1,6 @@
 import type {Processor, Record} from '../types/ProcessorType';
-import padStart from "lodash/padStart";
-import {LogLevel} from '../LogLevel';
 import moment from 'moment';
-
-// TODO: refactor, use moment?
-// TODO: pass format as an option?
+import {LogLevel} from '../LogLevel';
 
 export function getLogLevelName(level) {
   return level === LogLevel.DEBUG ? 'DEBUG' :

@@ -3,18 +3,10 @@
  * logging level of the provided record. Useful for terminal logging only.
  */
 import type {Processor, Record} from '../types/ProcessorType';
-import type {LoggerLogLevel} from '../types/LoggerType'
+import type {HighlighterOptions} from '../types/processors/HighlighterType';
 import chalk from "chalk";
 import isObjectLike from "lodash/isObjectLike";
 import {LogLevel} from '../LogLevel';
-
-export type HighlighterOptions = {
-  colors: HighlighterColors
-};
-
-export type HighlighterColors = {
-  [LoggerLogLevel]: string;
-};
 
 const DEFAULT_COLORS = {
   [LogLevel.ERROR]: 'red',
