@@ -1,8 +1,6 @@
 import type {Processor, Record} from '../types/ProcessorType';
-import type {LoggerLogLevel} from '../types/LoggerType';
-import type {ErrorWrapperOptions, StackFrame} from '../types/processors/ErrorWrapperType';
-import {LogLevel} from '../LogLevel';
 import StackTrace from 'stacktrace-js';
+import {LogLevel} from '../LogLevel';
 
 const LOGGER_STACK_FRAME_COUNT = 5;
 
@@ -10,7 +8,7 @@ export function createErrorWrapProcessor({
   trimHeadFrames = 0,
   testMessage = defaultTestMessage,
   createStackTrace = defaultCreateStackTrace
-}: ErrorWrapperOptions = {}): Processor {
+} = {}): Processor {
   return (records: Record[]) => records.map(({level, messages, ...props}) => {
     messages = [...messages];
     for (let i = 0; i < messages.length; ++i) {
@@ -26,11 +24,11 @@ export function createErrorWrapProcessor({
   })
 }
 
-export function defaultTestMessage(message: *, level: LoggerLogLevel, i: number): boolean {
+export function defaultTestMessage(message: *, level: LogLevel, i: number): boolean {
   return level >= LogLevel.ERROR && i === 0;
 }
 
-export function defaultCreateStackTrace(errorType: string, errorMessage: string, stackFrames: StackFrame[]): string {
+export function defaultCreateStackTrace(errorType: string, errorMessage: string, stackFrames: string[]): string {
   const callStack = [];
   for (const {fileName, lineNumber, columnNumber, functionName} of stackFrames) {
     const path = `${fileName}:${lineNumber}:${columnNumber}`;

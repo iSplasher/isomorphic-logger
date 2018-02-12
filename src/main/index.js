@@ -1,5 +1,5 @@
 import {Logger} from './Logger';
-import {parseLoggersConfig} from './parseLoggersConfig';
+import {parseLoggerConfig} from './parseLoggerConfig';
 import {createAggregateProcessor} from './processors/createAggregateProcessor';
 import {createConsoleProcessor} from './processors/createConsoleProcessor';
 import {createDateAndLevelPrependProcessor} from './processors/createDateAndLevelPrependProcessor';
@@ -13,7 +13,7 @@ export {LogLevel} from './LogLevel';
 export {
   Logger,
   Logger as default,
-  parseLoggersConfig,
+  parseLoggerConfig,
   createAggregateProcessor,
   createConsoleProcessor,
   createDateAndLevelPrependProcessor,

@@ -1,4 +1,4 @@
-import {parseLoggersConfig, createLoggerFromConfig} from '../main/parseLoggersConfig';
+import {parseLoggerConfig, createLoggerFromConfig} from '../main/parseLoggerConfig';
 import {Logger} from '../main/Logger';
 
 jest.mock('../main/Logger', () => {
@@ -7,25 +7,25 @@ jest.mock('../main/Logger', () => {
   return {Logger};
 });
 
-describe('parseLoggersConfig', () => {
+describe('parseLoggerConfig', () => {
 
   it(`throws an error when no logger "id" is passed`, () => {
-    expect(() => parseLoggersConfig([{channels: []}])).toThrow()
+    expect(() => parseLoggerConfig([{channels: []}])).toThrow()
   });
 
   it(`throws an error when no logger channels are passed`, () => {
-    expect(() => parseLoggersConfig([{id: 'foo'}])).toThrow();
-    expect(() => parseLoggersConfig([{id: 'foo', channels: {}}])).toThrow();
+    expect(() => parseLoggerConfig([{id: 'foo'}])).toThrow();
+    expect(() => parseLoggerConfig([{id: 'foo', channels: {}}])).toThrow();
   });
 
   it(`iterates over a config, validates config properties and passes them to logger creator function`, () => {
     const loggerCreator = jest.fn();
-    parseLoggersConfig([{id: 'foo', channels: []}], {bar: 'baz'}, loggerCreator);
+    parseLoggerConfig([{id: 'foo', channels: []}], {bar: 'baz'}, loggerCreator);
     expect(loggerCreator).lastCalledWith([], {bar: 'baz'});
   });
 
   it(`creates a map with loggers`, () => {
-    const result = parseLoggersConfig([{id: 'foo', channels: []}], {}, () => ({bar: 'baz'}));
+    const result = parseLoggerConfig([{id: 'foo', channels: []}], {}, () => ({bar: 'baz'}));
     expect(result).toEqual({foo: {bar: 'baz'}});
   });
 });

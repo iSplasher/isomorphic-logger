@@ -1,4 +1,4 @@
-import type {LoggerLogLevel, LoggerChannel, LogResult} from './types/LoggerType'
+import type {LoggerChannel, LogResult} from './types/LoggerType'
 import type {Processor, Record} from './types/ProcessorType';
 import {LogLevel} from './LogLevel';
 

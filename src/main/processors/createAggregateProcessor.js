@@ -1,12 +1,6 @@
-import type {Processor, Record} from '../types/ProcessorType';
+import type {Processor} from '../types/ProcessorType';
 
-export type AggregatorPredicate = (records: Record[], dispatch: ?Function) => boolean;
-
-export type AggregatorOptions = {
-  predicate: AggregatorPredicate;
-};
-
-export function createAggregateProcessor({predicate}: AggregatorOptions): Processor {
+export function createAggregateProcessor({predicate}): Processor {
   let resolve;
   let promise;
   let cache = [];
