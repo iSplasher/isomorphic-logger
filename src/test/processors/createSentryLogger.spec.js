@@ -1,4 +1,4 @@
-import {createSentryLogger} from '../../main/processors/createSentryLogger';
+import {createSentryProcessor} from '../../main/processors/createSentryProcessor';
 import {LogLevel} from '../../main/LogLevel';
 
 describe(`createSentryProcessor`, () => {
@@ -10,7 +10,7 @@ describe(`createSentryProcessor`, () => {
       captureException: jest.fn(),
       captureMessage: jest.fn()
     };
-    sentryLogger = createSentryLogger(Raven);
+    sentryLogger = createSentryProcessor(Raven);
   });
 
   it(`saves passed records`, () => {

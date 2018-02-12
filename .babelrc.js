@@ -19,12 +19,9 @@ switch (process.env.BABEL_ENV || process.env.NODE_ENV) {
   case 'production':
     module.exports = {
       presets: [
-        ['@babel/preset-env', {'loose': true}],
+        ['@babel/preset-env', {loose: true}],
         '@babel/preset-stage-0',
         '@babel/preset-flow'
-      ],
-      plugins: [
-        '@babel/plugin-transform-runtime'
       ]
     };
     break;
@@ -32,12 +29,9 @@ switch (process.env.BABEL_ENV || process.env.NODE_ENV) {
   case 'development':
     module.exports = {
       presets: [
-        ['@babel/preset-env', {'loose': true}],
+        ['@babel/preset-env', {loose: true}],
         '@babel/preset-stage-0',
         '@babel/preset-flow'
-      ],
-      plugins: [
-        '@babel/plugin-transform-runtime'
       ]
     };
     break;
@@ -45,7 +39,7 @@ switch (process.env.BABEL_ENV || process.env.NODE_ENV) {
   case 'test':
     module.exports = {
       presets: [
-        ['@babel/preset-env', {'loose': true, 'shippedProposals': true}],
+        ['@babel/preset-env', {loose: true}],
         '@babel/preset-stage-0',
         '@babel/preset-flow'
       ],

@@ -1,7 +1,7 @@
 import type {Processor, Record} from '../types/ProcessorType';
 import {LogLevel} from '../LogLevel';
 
-export function createConsoleAppender(): Processor {
+export function createConsoleProcessor(): Processor {
   return (records: Record[]) => {
     for (const {level, messages} of records) {
       switch (level) {

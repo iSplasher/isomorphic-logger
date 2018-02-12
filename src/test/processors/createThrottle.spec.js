@@ -1,9 +1,11 @@
-import {createThrottle} from '../../main/processors/createThrottle';
+import {createThrottleProcessor} from '../../main/processors/createThrottleProcessor';
 
-describe('`createThrottle`', () => {
+// TODO: " ' " -> " ` " everywhere
+
+describe('createThrottleProcessor', () => {
 
   it('processes records after leading delay expires', done => {
-    const throttle = createThrottle({delay: 200, length: Infinity, leading: true});
+    const throttle = createThrottleProcessor({delay: 200, length: Infinity, leading: true});
 
     const promise = throttle([1]);
 
@@ -29,7 +31,7 @@ describe('`createThrottle`', () => {
   });
 
   it('processes records after trailing delay expires', () => {
-    const throttle = createThrottle({delay: 200, length: Infinity, leading: false});
+    const throttle = createThrottleProcessor({delay: 200, length: Infinity, leading: false});
 
     const promise = throttle([1]);
 
@@ -44,7 +46,7 @@ describe('`createThrottle`', () => {
   });
 
   it('processes records when length limit is reached', () => {
-    const throttle = createThrottle({delay: 200, length: 2, leading: false});
+    const throttle = createThrottleProcessor({delay: 200, length: 2, leading: false});
 
     throttle([1]);
     throttle([2]); // Dispatch occurs after this statement

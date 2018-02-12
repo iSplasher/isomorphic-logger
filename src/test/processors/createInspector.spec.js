@@ -1,8 +1,8 @@
-import {createInspector} from '../../main/processors/createInspector';
+import {createInspectProcessor} from '../../main/processors/createInspectProcessor';
 
-describe('createInspector', () => {
+describe('createInspectProcessor', () => {
   it(`inspects given record.message in accordance with passed depth (depth=3)`, () => {
-    const inspector = createInspector({depth: 3});
+    const inspector = createInspectProcessor({depth: 3});
     const result = inspector([{messages: [
       {foo: {bar: {baz: {qux: {foo: {bar: {}}}}}}}
     ]}]);
@@ -10,7 +10,7 @@ describe('createInspector', () => {
   });
 
   it(`inspects given record.message in accordance with passed depth (depth=5)`, () => {
-    const inspector = createInspector({depth: 5});
+    const inspector = createInspectProcessor({depth: 5});
     const result = inspector([{messages: [
       {foo: {bar: {baz: {qux: {foo: {bar: {}}}}}}}
     ]}]);
@@ -18,7 +18,7 @@ describe('createInspector', () => {
   });
 
   it(`inspects given record.message in accordance with no passed depth (default is 10)`, () => {
-    const inspector = createInspector();
+    const inspector = createInspectProcessor();
     const result = inspector([{messages: [
       {foo: {bar: {baz: {qux: {foo: {bar: {baz: {qux: {foo: {foo: {bar: {baz: {qux: {foo: {bar: {baz: {qux: {foo: {}}}}}}}}}}}}}}}}}}}
     ]}]);

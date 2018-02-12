@@ -2,7 +2,7 @@ import delay from 'delay';
 import {Logger} from '../main/Logger';
 import {LogLevel} from '../main/LogLevel';
 
-describe('`Logger.channel`', () => {
+describe(`Logger.channel`, () => {
 
   it('creates channel in logger when function processor is provided', () => {
     const logger = new Logger;
@@ -27,7 +27,7 @@ describe('`Logger.channel`', () => {
   });
 });
 
-describe('`Logger.process`', () => {
+describe(`Logger.process`, () => {
 
   it('returns `null` for synchronous processors', () => {
     const trap = [];

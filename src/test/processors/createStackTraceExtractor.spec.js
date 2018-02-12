@@ -1,9 +1,9 @@
-import {createStackTraceExtractor} from '../../main/processors/createStackTraceExtractor';
+import {createStackTraceTransformProcessor} from '../../main/processors/createStackTraceTransformProcessor';
 
 describe(`createStackTraceExtractor`, () => {
   it(`invokes replacer function if a message is an instance of Error class`, () => {
     const replacer = jest.fn();
-    const stackTraceExtractor = createStackTraceExtractor({replacer});
+    const stackTraceExtractor = createStackTraceTransformProcessor({replacer});
     stackTraceExtractor([{messages: [new Error]}]);
     expect(replacer.mock.calls.length).toBe(1);
   });
@@ -16,7 +16,7 @@ describe(`createStackTraceExtractor`, () => {
       }
       return 'foo stack';
     };
-    const stackTraceExtractor = createStackTraceExtractor({replacer});
+    const stackTraceExtractor = createStackTraceTransformProcessor({replacer});
     const records = stackTraceExtractor([{messages: [new Error]}]);
     const [error] = records[0].messages;
     expect(approver.mock.calls.length).toBe(1);

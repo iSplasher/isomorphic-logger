@@ -1,20 +1,20 @@
 import {
-  createErrorWrapper,
+  createErrorWrapProcessor,
   defaultCreateStackTrace,
   defaultTestMessage
-} from '../../main/processors/createErrorWrapper';
+} from '../../main/processors/createErrorWrapProcessor';
 import {LogLevel} from '../../main/LogLevel';
 
 describe(`createErrorWrapperProcessor`, () => {
 
   it(`saves passed records`, () => {
     const records = [{level: 'foo', messages: [], extraProperty: 123}];
-    const errorWrapper = createErrorWrapper();
+    const errorWrapper = createErrorWrapProcessor();
     expect(errorWrapper(records)).toEqual(records);
   });
 
   it(`wraps logger message with error object`, () => {
-    const errorWrapper = createErrorWrapper();
+    const errorWrapper = createErrorWrapProcessor();
     const message = 'error message';
     const records = [{level: LogLevel.ERROR, messages: [message]}];
     const result = errorWrapper(records);
@@ -24,8 +24,8 @@ describe(`createErrorWrapperProcessor`, () => {
   });
 
   it(`trims error stack depending on trimHeadFrames option`, () => {
-    const errorWrapperWithoutTrim = createErrorWrapper();
-    const errorWrapperWithTrim = createErrorWrapper({trimHeadFrames: 3});
+    const errorWrapperWithoutTrim = createErrorWrapProcessor();
+    const errorWrapperWithTrim = createErrorWrapProcessor({trimHeadFrames: 3});
     const records = [{level: LogLevel.ERROR, messages: ['error message']}];
     const stackA = errorWrapperWithoutTrim(records)[0].messages[0].stack.split('\n');
     const stackB = errorWrapperWithTrim(records)[0].messages[0].stack.split('\n');

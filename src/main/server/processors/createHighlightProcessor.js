@@ -4,8 +4,8 @@
  */
 import type {Processor, Record} from '../../types/ProcessorType';
 import type {HighlighterOptions} from '../../types/processors/HighlighterType';
-import chalk from "chalk";
-import isObjectLike from "lodash/isObjectLike";
+import chalk from 'chalk';
+import isObjectLike from 'lodash/isObjectLike';
 import {LogLevel} from '../../LogLevel';
 
 const DEFAULT_COLORS = {
@@ -15,7 +15,7 @@ const DEFAULT_COLORS = {
   [LogLevel.WARN]: 'yellow'
 };
 
-export function createHighlighter({colors = DEFAULT_COLORS}: HighlighterOptions = {}): Processor {
+export function createHighlightProcessor({colors = DEFAULT_COLORS}: HighlighterOptions = {}): Processor {
   return (records: Record[]) => records.map(record => ({
     ...record,
     messages: record.messages.map(message => {

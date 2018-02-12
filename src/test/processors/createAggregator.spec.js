@@ -1,16 +1,16 @@
-import {createAggregator} from '../../main/processors/createAggregator';
+import {createAggregateProcessor} from '../../main/processors/createAggregateProcessor';
 
-describe('`createAggregator`', () => {
+describe(`createAggregator`, () => {
 
   it('returns same promise if predicate did not return true', () => {
     const predicate = records => false;
-    const aggregate = createAggregator({predicate});
+    const aggregate = createAggregateProcessor({predicate});
     expect(aggregate([1])).toBe(aggregate([2]));
   });
 
   it('processes records that were collected before predicate returned true', async done => {
     const predicate = records => records.length > 1;
-    const aggregate = createAggregator({predicate});
+    const aggregate = createAggregateProcessor({predicate});
 
     const promise = aggregate([1]);
 
@@ -23,7 +23,7 @@ describe('`createAggregator`', () => {
 
   it('flushes cache between processes', async done => {
     const predicate = records => records.length > 1;
-    const aggregate = createAggregator({predicate});
+    const aggregate = createAggregateProcessor({predicate});
 
     aggregate([1]);
     aggregate([2]); // Flush should happen after this statement.
@@ -43,7 +43,7 @@ describe('`createAggregator`', () => {
       // Predicate always returns false, but invokes process asynchronously.
       return false;
     };
-    const aggregate = createAggregator({predicate});
+    const aggregate = createAggregateProcessor({predicate});
 
     const promise = aggregate([1]);
 

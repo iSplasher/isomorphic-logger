@@ -1,14 +1,14 @@
 import type {Processor} from '../../types/ProcessorType';
 import type {FileAppenderOptions} from '../../types/server/processors/FileAppenderType';
 import fs from 'fs';
-import {createFileAppender} from './createFileAppender';
+import {createFileAppendProcessor} from './createFileAppendProcessor';
 
-export function createRollingFileAppender({
+export function createRollingFileAppendProcessor({
   filePath,
   maxFileSize = 102400,
   ...fileAppenderOptions
 }: FileAppenderOptions = {}): Processor {
-  const fileAppender = createFileAppender(filePath, fileAppenderOptions);
+  const fileAppender = createFileAppendProcessor(filePath, fileAppenderOptions);
 
   let index = 1;
   while (true) {

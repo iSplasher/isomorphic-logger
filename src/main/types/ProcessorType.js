@@ -4,7 +4,7 @@ import type {Logger, LoggerLogLevel} from './LoggerType';
 export type Record = {
   level: LoggerLogLevel;
   messages: Array<*>;
-  meta: *;
+  meta?: *;
 };
 
 export type ProcessorOptions = *;

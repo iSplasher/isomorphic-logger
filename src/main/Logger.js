@@ -2,16 +2,15 @@ import type {LoggerLogLevel, LoggerChannel, LogResult} from './types/LoggerType'
 import type {Processor, Record} from './types/ProcessorType';
 import {LogLevel} from './LogLevel';
 
-// TODO: Help Needed: flow - errors
-// TODO: Help Needed: Sentry - react-native has es6 in node_modules
-// TODO: Help Needed: Logger.level doesn't exist anymore?
-// TODO: tests
-// TODO: web - finish moving logger, create config
-// TODO: android - finish moving logger, create config
-
 export class Logger {
 
+  level: LogLevel = LogLevel.INFO;
   channels: LoggerChannel[] = [];
+
+  setLevel(level: LogLevel): Logger {
+    this.level = level;
+    return this;
+  }
 
   /**
    * Creates logging channel that consists of a list of processors.
@@ -24,7 +23,7 @@ export class Logger {
    *
    * @returns {Logger}
    */
-  channel(level: LoggerLogLevel, ...processors: Processor[]): this {
+  channel(...processors: Processor[]): Logger {
     processors = processors.map(processor => {
       if (typeof processor === 'function') {
         return processor;
@@ -35,7 +34,7 @@ export class Logger {
       throw new Error('Processor should be a function or an object with `process` callback');
     });
 
-    this.channels.push({level, processors, promise: null, pendingCount: 0});
+    this.channels.push({processors, promise: null, pendingCount: 0});
     return this;
   }
 
@@ -49,34 +48,34 @@ export class Logger {
     const promises = [];
 
     for (const channel of this.channels) {
-      let value: Record[] = records.filter(record => record.level >= channel.level);
+      let r: Record[] = records.filter(record => record.level >= this.level);
 
-      if (value.length) {
+      if (r.length) {
         if (channel.pendingCount > 0) {
-          value = Promise.resolve(value);
+          r = Promise.resolve(r);
         }
         for (const processor of channel.processors) {
-          if (value instanceof Promise) {
-            value = value.then(records => records && processor(records));
+          if (r instanceof Promise) {
+            r = r.then(records => records && processor(records));
           } else {
-            value = processor(value);
-            if (!value) {
+            r = processor(r);
+            if (!r) {
               break;
             }
           }
         }
-        if (value instanceof Promise) {
+        if (r instanceof Promise) {
           const decrease = () => {channel.pendingCount -= 1};
 
-          value = value.then(decrease, error => {
-            console.log(error);
+          r = r.then(decrease, error => {
+            console.sendMessages(error);
             decrease();
           });
 
-          if (channel.pendingCount > 0 && channel.promise instanceof Promise) {
-            channel.promise = channel.promise.then(() => value);
+          if (channel.pendingCount > 0) {
+            channel.promise = channel.promise.then(() => r);
           } else {
-            channel.promise = value;
+            channel.promise = r;
           }
           channel.pendingCount += 1;
         }
@@ -92,6 +91,26 @@ export class Logger {
     return null;
   }
 
+  isTraceEnabled() {
+    return this.level >= LogLevel.TRACE;
+  }
+
+  isDebugEnabled() {
+    return this.level >= LogLevel.DEBUG;
+  }
+
+  isInfoEnabled() {
+    return this.level >= LogLevel.INFO;
+  }
+
+  isWarnEnabled() {
+    return this.level >= LogLevel.WARN;
+  }
+
+  isErrorEnabled() {
+    return this.level >= LogLevel.ERROR;
+  }
+
   /**
    * Send messages to channels of this logger.
    *
@@ -101,27 +120,31 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  log(level: LoggerLogLevel, messages: Array<*>, meta: *): LogResult {
+  sendMessages(level: LogLevel, messages: Array<*>, meta: *): LogResult {
     return this.process([{level, messages, meta}]);
+  }
+  
+  log(...messages: *): LogResult {
+    return this.sendMessages(LogLevel.INFO, messages);
   }
 
   trace(...messages: *): LogResult {
-    return this.log(LogLevel.TRACE, messages);
+    return this.sendMessages(LogLevel.TRACE, messages);
   }
 
   debug(...messages: *): LogResult {
-    return this.log(LogLevel.DEBUG, messages);
+    return this.sendMessages(LogLevel.DEBUG, messages);
   }
 
   info(...messages: *): LogResult {
-    return this.log(LogLevel.INFO, messages);
+    return this.sendMessages(LogLevel.INFO, messages);
   }
 
   warn(...messages: *): LogResult {
-    return this.log(LogLevel.WARN, messages);
+    return this.sendMessages(LogLevel.WARN, messages);
   }
 
   error(...messages: *): LogResult {
-    return this.log(LogLevel.ERROR, messages);
+    return this.sendMessages(LogLevel.ERROR, messages);
   }
 }

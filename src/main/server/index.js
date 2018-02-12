@@ -1,16 +1,19 @@
-import {PROCESSOR_FACTORIES as DEFAULT_PROCESSOR_FACTORIES} from '../index';
+import {ProcessorFactories as UniversalProcessorFactories} from '../index';
 
-import {createHighlighter} from './processors/createHighlighter';
-import {createFileAppender} from './processors/createFileAppender';
-import {createRollingFileAppender} from './processors/createRollingFileAppender';
+import {createHighlightProcessor} from './processors/createHighlightProcessor';
+import {createFileAppendProcessor} from './processors/createFileAppendProcessor';
+import {createRollingFileAppendProcessor} from './processors/createRollingFileAppendProcessor';
 
-export {createHighlighter};
-export {createFileAppender};
-export {createRollingFileAppender};
+export * from '../index';
+export {
+  createHighlightProcessor,
+  createFileAppendProcessor,
+  createRollingFileAppendProcessor
+};
 
-export const PROCESSOR_FACTORIES = {
-  ...DEFAULT_PROCESSOR_FACTORIES,
-  highlighter: createHighlighter,
-  fileAppender: createFileAppender,
-  rollingFileAppender: createRollingFileAppender
+export const ProcessorFactories = {
+  ...UniversalProcessorFactories,
+  highlight: createHighlightProcessor,
+  appendToFile: createFileAppendProcessor,
+  appendRollingFile: createRollingFileAppendProcessor
 };

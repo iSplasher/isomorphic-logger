@@ -2,7 +2,7 @@ import type {Processor, Record} from '../types/ProcessorType';
 import type {LogsConcatenatorOptions} from '../types/processors/LogsConcatenatorType';
 import safeJsonStringify from 'safe-json-stringify';
 
-export function createLogsConcatenator({
+export function createMessageConcatProcessor({
   stringifyLoggedValue = stringifyLog
 }: LogsConcatenatorOptions = {}): Processor {
   return (records: Record[]) => records.map(({level, messages, meta}) => {

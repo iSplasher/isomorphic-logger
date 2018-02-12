@@ -1,15 +1,15 @@
 import type {Processor, Record} from '../types/ProcessorType';
 import type {ThrottlerOptions} from '../types/processors/ThrottlerType';
-import {createAggregator} from "./createAggregator";
+import {createAggregateProcessor} from "./createAggregateProcessor";
 
-export function createThrottle({
+export function createThrottleProcessor({
   delay = 1000,
   length = 1000,
   leading = true
 }: ThrottlerOptions = {}): Processor {
   let timeout;
 
-  return createAggregator({
+  return createAggregateProcessor({
     predicate(records: Record[], dispatch) {
       if (records.length < length) {
         // Aggregator did not collect enough records yet.

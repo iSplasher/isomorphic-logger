@@ -5,7 +5,7 @@
 import type {Processor, Record} from '../types/ProcessorType';
 import objectInspect from "object-inspect";
 
-export function createInspector({depth = 10} = {}): Processor {
+export function createInspectProcessor({depth = 10} = {}): Processor {
   return (records: Record[]) => records.map(record => ({
     ...record,
     messages: record.messages.map(message => {

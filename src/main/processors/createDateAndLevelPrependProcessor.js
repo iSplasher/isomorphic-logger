@@ -3,14 +3,15 @@ import moment from 'moment';
 import {LogLevel} from '../LogLevel';
 
 export function getLogLevelName(level) {
-  return level === LogLevel.DEBUG ? 'DEBUG' :
-         level === LogLevel.ERROR ? 'ERROR' :
-         level === LogLevel.INFO ? 'INFO' :
-         level === LogLevel.TRACE ? 'TRACE' :
-         level === LogLevel.WARN ? 'WARN' :
-         level;
+  for (const key in LogLevel) {
+    if (LogLevel[key] === level) {
+      return key;
+    }
+  }
+  return level;
 }
-export function createDateAndLevelPrepender({
+
+export function createDateAndLevelPrependProcessor({
   dateFormat = 'YYYY-MM-DD HH:MM:SS'
 } = {}): Processor {
   return (records: Record[]) => records.map(record => {

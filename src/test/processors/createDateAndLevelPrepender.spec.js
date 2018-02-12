@@ -1,4 +1,4 @@
-import {createDateAndLevelPrepender, getLogLevelName} from '../../main/processors/createDateAndLevelPrepender';
+import {createDateAndLevelPrependProcessor, getLogLevelName} from '../../main/processors/createDateAndLevelPrependProcessor';
 describe(`getLogLevelName`, () => {
   it(`returns human readable name of log level`, () => {
     expect(getLogLevelName(0)).toBe('TRACE');
@@ -10,7 +10,7 @@ describe(`getLogLevelName`, () => {
   });
 
   it(`prepends level and and current date to record.message`, () => {
-    const dateAndLevelPrepender = createDateAndLevelPrepender({dateFormat: 'YYYY'});
+    const dateAndLevelPrepender = createDateAndLevelPrependProcessor({dateFormat: 'YYYY'});
     const records = dateAndLevelPrepender([{level: 0, messages: ['foo']}]);
     const [level, date, message] = records[0].messages;
     expect(level).toBe('TRACE');

@@ -1,35 +1,38 @@
 import {Logger} from './Logger';
 import {parseLoggersConfig} from './parseLoggersConfig';
-import {createAggregator} from './processors/createAggregator';
-import {createConsoleAppender} from './processors/createConsoleAppender';
-import {createDateAndLevelPrepender} from './processors/createDateAndLevelPrepender';
-import {createInspector} from './processors/createInspector';
-import {createStackTraceExtractor} from './processors/createStackTraceExtractor';
-import {createThrottle} from './processors/createThrottle';
-import {createErrorWrapper} from './processors/createErrorWrapper';
-import {createLogsConcatenator} from './processors/createLogsConcatenator';
+import {createAggregateProcessor} from './processors/createAggregateProcessor';
+import {createConsoleProcessor} from './processors/createConsoleProcessor';
+import {createDateAndLevelPrependProcessor} from './processors/createDateAndLevelPrependProcessor';
+import {createInspectProcessor} from './processors/createInspectProcessor';
+import {createStackTraceTransformProcessor} from './processors/createStackTraceTransformProcessor';
+import {createThrottleProcessor} from './processors/createThrottleProcessor';
+import {createErrorWrapProcessor} from './processors/createErrorWrapProcessor';
+import {createMessageConcatProcessor} from './processors/createMessageConcatProcessor';
 
-export {Logger, Logger as default};
 export {LogLevel} from './LogLevel';
-export {parseLoggersConfig};
-export {createAggregator};
-export {createConsoleAppender};
-export {createDateAndLevelPrepender};
-export {createInspector};
-export {createStackTraceExtractor};
-export {createThrottle};
-export {createErrorWrapper};
-export {createLogsConcatenator};
-export {createSentryLogger} from './processors/createSentryLogger';
+export {
+  Logger,
+  Logger as default,
+  parseLoggersConfig,
+  createAggregateProcessor,
+  createConsoleProcessor,
+  createDateAndLevelPrependProcessor,
+  createInspectProcessor,
+  createStackTraceTransformProcessor,
+  createThrottleProcessor,
+  createErrorWrapProcessor,
+  createMessageConcatProcessor
+};
+export {createSentryProcessor} from './processors/createSentryProcessor';
 
-export const PROCESSOR_FACTORIES = {
+export const ProcessorFactories = {
   logger: Logger,
-  aggregator: createAggregator,
-  consoleAppender: createConsoleAppender,
-  dateAndLevelPrepender: createDateAndLevelPrepender,
-  inspector: createInspector,
-  stackTraceExtractor: createStackTraceExtractor,
-  throttle: createThrottle,
-  errorWrapper: createErrorWrapper,
-  logsConcatenator: createLogsConcatenator
+  aggregate: createAggregateProcessor,
+  console: createConsoleProcessor,
+  prependDateAndLevel: createDateAndLevelPrependProcessor,
+  inspect: createInspectProcessor,
+  extractStackTrace: createStackTraceTransformProcessor,
+  throttle: createThrottleProcessor,
+  wrapError: createErrorWrapProcessor,
+  concatMessages: createMessageConcatProcessor
 };

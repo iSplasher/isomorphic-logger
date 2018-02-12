@@ -4,7 +4,9 @@ import type {ErrorWrapperOptions, StackFrame} from '../types/processors/ErrorWra
 import {LogLevel} from '../LogLevel';
 import StackTrace from 'stacktrace-js';
 
-export function createErrorWrapper({
+const LOGGER_STACK_FRAME_COUNT = 5;
+
+export function createErrorWrapProcessor({
   trimHeadFrames = 0,
   testMessage = defaultTestMessage,
   createStackTrace = defaultCreateStackTrace
@@ -16,7 +18,7 @@ export function createErrorWrapper({
         continue;
       }
       const error = new Error(messages[i]);
-      const stackFrames = StackTrace.getSync().slice(trimHeadFrames);
+      const stackFrames = StackTrace.getSync().slice(trimHeadFrames + LOGGER_STACK_FRAME_COUNT);
       error.stack = createStackTrace(error.name, error.message, stackFrames);
       messages[i] = error;
     }

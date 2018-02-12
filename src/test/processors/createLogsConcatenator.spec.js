@@ -1,12 +1,12 @@
 import {
-  createLogsConcatenator,
+  createMessageConcatProcessor,
   stringifyLog
-} from '../../main/processors/createLogsConcatenator';
+} from '../../main/processors/createMessageConcatProcessor';
 
 describe(`createLogsConcatenatorProcessor`, () => {
   let logsConcatenator;
 
-  beforeEach(() => logsConcatenator = createLogsConcatenator());
+  beforeEach(() => logsConcatenator = createMessageConcatProcessor());
 
   it(`saves passed records`, () => {
     const args = [{level: 'foo', messages: [], meta: 123}];

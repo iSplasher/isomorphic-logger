@@ -8,7 +8,7 @@ function webpackStackCleaner(stack) {
    return stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
 }
 
-export function createStackTraceExtractor({
+export function createStackTraceTransformProcessor({
     replacer = webpackStackCleaner
 }: StackTraceExtractorOptions = {}): Processor {
   return (records: Record[]) => records.map(record => ({

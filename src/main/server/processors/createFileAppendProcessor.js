@@ -3,7 +3,7 @@ import type {FileAppenderOptions} from '../../types/server/processors/FileAppend
 import fs from 'fs';
 import path from 'path';
 
-export function createFileAppender({
+export function createFileAppendProcessor({
   filePath,
   encoding = 'utf8',
   lineBreak = '\n',
