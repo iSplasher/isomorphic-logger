@@ -1,6 +1,6 @@
 import {createAggregateProcessor} from '../../main/processors/createAggregateProcessor';
 
-describe(`createAggregator`, () => {
+describe(`createAggregateProcessor`, () => {
 
   it('returns same promise if predicate did not return true', () => {
     const predicate = records => false;

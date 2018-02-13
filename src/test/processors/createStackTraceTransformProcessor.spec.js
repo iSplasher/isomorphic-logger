@@ -1,6 +1,6 @@
 import {createStackTraceTransformProcessor} from '../../main/processors/createStackTraceTransformProcessor';
 
-describe(`createStackTraceExtractor`, () => {
+describe(`createStackTraceTransformProcessor`, () => {
   it(`invokes replacer function if a message is an instance of Error class`, () => {
     const replacer = jest.fn();
     const stackTraceExtractor = createStackTraceTransformProcessor({replacer});

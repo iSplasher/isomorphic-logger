@@ -1,12 +1,5 @@
 export class LogLevel {
 
-  static TRACE = new LogLevel(0);
-  static DEBUG = new LogLevel(100);
-  static INFO = new LogLevel(200);
-  static WARN = new LogLevel(300);
-  static ERROR = new LogLevel(400);
-  static OFF = new LogLevel(Number.MAX_VALUE);
-
   value: number;
 
   static valueOf(name: string) {
@@ -24,3 +17,10 @@ export class LogLevel {
     return this.value;
   }
 }
+
+LogLevel.TRACE = new LogLevel(0);
+LogLevel.DEBUG = new LogLevel(100);
+LogLevel.INFO = new LogLevel(200);
+LogLevel.WARN = new LogLevel(300);
+LogLevel.ERROR = new LogLevel(400);
+LogLevel.OFF = new LogLevel(Number.MAX_VALUE);

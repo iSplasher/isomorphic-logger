@@ -1,7 +1,5 @@
 import {createThrottleProcessor} from '../../main/processors/createThrottleProcessor';
 
-// TODO: " ' " -> " ` " everywhere
-
 describe('createThrottleProcessor', () => {
 
   it('processes records after leading delay expires', done => {

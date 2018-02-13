@@ -1,5 +1,5 @@
 import type {Processor, Record} from '../types/ProcessorType';
-import {createAggregateProcessor} from "./createAggregateProcessor";
+import {createAggregateProcessor} from './createAggregateProcessor';
 
 export function createThrottleProcessor({
   delay = 1000,

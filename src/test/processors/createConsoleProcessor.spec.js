@@ -1,8 +1,10 @@
 import {createConsoleProcessor} from '../../main/processors/createConsoleProcessor';
+import {LogLevel} from '../../main/LogLevel';
 
-describe(`createConsoleAppender`, () => {
+describe(`createConsoleProcessor`, () => {
   beforeEach(() => {
     global.console = {
+      log: jest.fn(),
       debug: jest.fn(),
       info: jest.fn(),
       warn: jest.fn(),
@@ -12,28 +14,28 @@ describe(`createConsoleAppender`, () => {
 
   it(`calls global.console.debug for record.level = TRACE and record.level.DEBUG`, () => {
     const consoleAppender = createConsoleProcessor();
-    consoleAppender([{level: 0, messages: ['trace']}]);
+    consoleAppender([{level: LogLevel.TRACE, messages: ['trace']}]);
     expect(global.console.debug).lastCalledWith('trace');
 
-    consoleAppender([{level: 1, messages: ['debug']}]);
+    consoleAppender([{level: LogLevel.DEBUG, messages: ['debug']}]);
     expect(global.console.debug).lastCalledWith('debug');
   });
 
   it(`calls global.console.info for record.level = INFO`, () => {
     const consoleAppender = createConsoleProcessor();
-    consoleAppender([{level: 2, messages: ['info']}]);
+    consoleAppender([{level: LogLevel.INFO, messages: ['info']}]);
     expect(global.console.info).lastCalledWith('info');
   });
 
   it(`calls global.console.warn for record.level = WARN`, () => {
     const consoleAppender = createConsoleProcessor();
-    consoleAppender([{level: 3, messages: ['warn']}]);
+    consoleAppender([{level: LogLevel.WARN, messages: ['warn']}]);
     expect(global.console.warn).lastCalledWith('warn');
   });
 
   it(`calls global.console.error for record.level = ERROR`, () => {
     const consoleAppender = createConsoleProcessor();
-    consoleAppender([{level: 4, messages: ['error']}]);
+    consoleAppender([{level: LogLevel.ERROR, messages: ['error']}]);
     expect(global.console.error).lastCalledWith('error');
   });
 });

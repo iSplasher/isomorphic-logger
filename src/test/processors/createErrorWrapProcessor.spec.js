@@ -5,7 +5,7 @@ import {
 } from '../../main/processors/createErrorWrapProcessor';
 import {LogLevel} from '../../main/LogLevel';
 
-describe(`createErrorWrapperProcessor`, () => {
+describe(`createErrorWrapProcessor`, () => {
 
   it(`saves passed records`, () => {
     const records = [{level: 'foo', messages: [], extraProperty: 123}];
@@ -25,14 +25,14 @@ describe(`createErrorWrapperProcessor`, () => {
 
   it(`trims error stack depending on trimHeadFrames option`, () => {
     const errorWrapperWithoutTrim = createErrorWrapProcessor();
-    const errorWrapperWithTrim = createErrorWrapProcessor({trimHeadFrames: 3});
+    const errorWrapperWithTrim = createErrorWrapProcessor({trimHeadFrames: 1});
     const records = [{level: LogLevel.ERROR, messages: ['error message']}];
     const stackA = errorWrapperWithoutTrim(records)[0].messages[0].stack.split('\n');
     const stackB = errorWrapperWithTrim(records)[0].messages[0].stack.split('\n');
 
     const expectedStack = [
       ...stackA.slice(0, 1),
-      ...stackA.slice(4)
+      ...stackA.slice(2)
     ];
 
     expect(expectedStack).toEqual(stackB);

@@ -4,7 +4,10 @@ import {LogLevel} from '../LogLevel';
 
 export function getLogLevelName(level) {
   for (const key in LogLevel) {
-    if (LogLevel[key] === level) {
+    if (level instanceof LogLevel && level === LogLevel[key]) {
+      return key;
+    }
+    if (typeof level === 'number' && level === LogLevel[key].valueOf()) {
       return key;
     }
   }

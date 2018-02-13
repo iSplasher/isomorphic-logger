@@ -1,9 +1,6 @@
-import {
-  createMessageConcatProcessor,
-  stringifyLog
-} from '../../main/processors/createMessageConcatProcessor';
+import {createMessageConcatProcessor, stringifyLog} from '../../main/processors/createMessageConcatProcessor';
 
-describe(`createLogsConcatenatorProcessor`, () => {
+describe(`createMessageConcatProcessor`, () => {
   let logsConcatenator;
 
   beforeEach(() => logsConcatenator = createMessageConcatProcessor());

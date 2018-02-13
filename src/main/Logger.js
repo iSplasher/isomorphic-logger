@@ -1,11 +1,10 @@
-import type {LoggerChannel, LogResult} from './types/LoggerType'
 import type {Processor, Record} from './types/ProcessorType';
 import {LogLevel} from './LogLevel';
 
 export class Logger {
 
   level: LogLevel = LogLevel.INFO;
-  channels: LoggerChannel[] = [];
+  channels = [];
 
   setLevel(level: LogLevel): Logger {
     this.level = level;
@@ -44,7 +43,7 @@ export class Logger {
    * @param {Array} records
    * @return {Promise|null}
    */
-  process(records: Record[]): LogResult {
+  process(records: Record[]) {
     const promises = [];
 
     for (const channel of this.channels) {
@@ -120,31 +119,31 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  sendMessages(level: LogLevel, messages: Array<*>, meta: *): LogResult {
+  sendMessages(level: LogLevel, messages: Array<*>, meta: *) {
     return this.process([{level, messages, meta}]);
   }
   
-  log(...messages: *): LogResult {
+  log(...messages: *) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  trace(...messages: *): LogResult {
+  trace(...messages: *) {
     return this.sendMessages(LogLevel.TRACE, messages);
   }
 
-  debug(...messages: *): LogResult {
+  debug(...messages: *) {
     return this.sendMessages(LogLevel.DEBUG, messages);
   }
 
-  info(...messages: *): LogResult {
+  info(...messages: *) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  warn(...messages: *): LogResult {
+  warn(...messages: *) {
     return this.sendMessages(LogLevel.WARN, messages);
   }
 
-  error(...messages: *): LogResult {
+  error(...messages: *) {
     return this.sendMessages(LogLevel.ERROR, messages);
   }
 }

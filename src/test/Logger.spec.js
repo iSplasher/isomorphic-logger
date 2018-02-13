@@ -8,10 +8,9 @@ describe(`Logger.channel`, () => {
     const logger = new Logger;
     const processor = records => null;
 
-    expect(logger.channel(LogLevel.TRACE, processor)).toBe(logger);
+    expect(logger.channel(processor)).toBe(logger);
 
     expect(logger.channels).toEqual([{
-      level: LogLevel.TRACE,
       processors: [processor],
       promise: null,
       pendingCount: 0
@@ -22,7 +21,7 @@ describe(`Logger.channel`, () => {
     const logger = new Logger;
     const processor = records => done();
 
-    expect(logger.channel(LogLevel.TRACE, processor)).toBe(logger);
+    expect(logger.channel(processor)).toBe(logger);
     logger.channels[0].processors[0]();
   });
 });
@@ -33,9 +32,11 @@ describe(`Logger.process`, () => {
     const trap = [];
     const records = [{level: LogLevel.TRACE, messages: ['foo']}];
     const logger = new Logger;
+    logger.setLevel(LogLevel.TRACE);
+
     const processor = records => trap.push(...records);
 
-    logger.channel(LogLevel.TRACE, processor);
+    logger.channel(processor);
 
     expect(logger.process(records)).toBeNull();
     expect(trap).toEqual(records);
@@ -45,12 +46,13 @@ describe(`Logger.process`, () => {
     const trap = [];
     const records = [{level: LogLevel.TRACE, messages: ['foo']}];
     const logger = new Logger;
+    logger.setLevel(LogLevel.TRACE);
     const processor = async records => {
       await delay(100);
       trap.push(...records);
     };
 
-    logger.channel(LogLevel.TRACE, processor);
+    logger.channel(processor);
 
     const promise = logger.process(records);
     expect(promise instanceof Promise).toBeTruthy();

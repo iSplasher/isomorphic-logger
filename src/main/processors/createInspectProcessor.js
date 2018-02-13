@@ -3,7 +3,7 @@
  * @param {Number} [depth = 10] Object nesting depth.
  */
 import type {Processor, Record} from '../types/ProcessorType';
-import objectInspect from "object-inspect";
+import objectInspect from 'object-inspect';
 
 export function createInspectProcessor({depth = 10} = {}): Processor {
   return (records: Record[]) => records.map(record => ({
