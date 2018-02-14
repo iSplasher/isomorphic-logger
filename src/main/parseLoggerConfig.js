@@ -1,4 +1,5 @@
 import {Logger} from './Logger';
+import {LogLevel} from './LogLevel';
 
 export function parseLoggerConfig(
   loggerConfig,
@@ -7,7 +8,7 @@ export function parseLoggerConfig(
   const {level, channels} = loggerConfig;
   const logger = new Logger();
   if (level) {
-    logger.setLevel(level);
+    logger.setLevel(LogLevel.valueOf(level));
   }
   for (const channel of channels) {
     const processors = [];
