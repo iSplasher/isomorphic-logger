@@ -11,4 +11,7 @@ fi;
 
 npm version ${VERSION} -m "%s [ci skip]";
 git push origin HEAD:$TRAVIS_BRANCH;
+
+cp README.md LICENSE package.json target/out
+cd target/out
 npm publish --tag=$NPM_TAG;
