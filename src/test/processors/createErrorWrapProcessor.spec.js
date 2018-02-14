@@ -24,16 +24,13 @@ describe(`createErrorWrapProcessor`, () => {
   });
 
   it(`trims error stack depending on trimHeadFrames option`, () => {
-    const errorWrapperWithoutTrim = createErrorWrapProcessor();
-    const errorWrapperWithTrim = createErrorWrapProcessor({trimHeadFrames: 1});
+    const errorWrapperWithoutTrim = createErrorWrapProcessor({trimHeadFrames: 3, loggerStackFrameCount: 0});
+    const errorWrapperWithTrim = createErrorWrapProcessor({trimHeadFrames: 5, loggerStackFrameCount: 0});
     const records = [{level: LogLevel.ERROR, messages: ['error message']}];
     const stackA = errorWrapperWithoutTrim(records)[0].messages[0].stack.split('\n');
     const stackB = errorWrapperWithTrim(records)[0].messages[0].stack.split('\n');
 
-    const expectedStack = [
-      ...stackA.slice(0, 1),
-      ...stackA.slice(2)
-    ];
+    const expectedStack = [...stackA.slice(0, 1), ...stackA.slice(3)];
 
     expect(expectedStack).toEqual(stackB);
   });

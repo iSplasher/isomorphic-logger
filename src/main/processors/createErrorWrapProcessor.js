@@ -2,10 +2,11 @@ import type {Processor, Record} from '../types/ProcessorType';
 import StackTrace from 'stacktrace-js';
 import {LogLevel} from '../LogLevel';
 
-const LOGGER_STACK_FRAME_COUNT = 5;
+const LOGGER_STACK_FRAME_COUNT = 10;
 
 export function createErrorWrapProcessor({
   trimHeadFrames = 0,
+  loggerStackFrameCount = LOGGER_STACK_FRAME_COUNT,
   testMessage = defaultTestMessage,
   createStackTrace = defaultCreateStackTrace
 } = {}): Processor {
@@ -16,12 +17,12 @@ export function createErrorWrapProcessor({
         continue;
       }
       const error = new Error(messages[i]);
-      const stackFrames = StackTrace.getSync().slice(trimHeadFrames + LOGGER_STACK_FRAME_COUNT);
+      const stackFrames = StackTrace.getSync().slice(trimHeadFrames + loggerStackFrameCount);
       error.stack = createStackTrace(error.name, error.message, stackFrames);
       messages[i] = error;
     }
     return {level, messages, ...props};
-  })
+  });
 }
 
 export function defaultTestMessage(message: *, level: LogLevel, i: number): boolean {

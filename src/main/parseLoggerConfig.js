@@ -1,23 +1,24 @@
 import {Logger} from './Logger';
 import {LogLevel} from './LogLevel';
+import toArray from 'lodash/toArray';
 
 export function parseLoggerConfig(
   loggerConfig,
-  processorFactories
+  processorFactories = {}
 ) {
   const {level, channels} = loggerConfig;
   const logger = new Logger();
   if (level) {
     logger.setLevel(LogLevel.valueOf(level));
   }
-  for (const channel of channels) {
+  for (const channel of toArray(channels)) {
     const processors = [];
     for (const {type, options} of channel) {
       const processorCreator = processorFactories[type];
-      if (!processorCreator) {
-        throw new Error(`Unknown processor type "${type}"`);
-      } else if (processorCreator === Logger) {
+      if (type === 'logger') {
         processors.push(parseLoggerConfig(options, processorFactories))
+      } else if (!processorCreator) {
+        throw new Error(`Unknown processor type "${type}"`);
       } else {
         processors.push(processorCreator(options))
       }
