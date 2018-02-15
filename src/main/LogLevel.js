@@ -1,9 +1,22 @@
+// @flow
+
 export class LogLevel {
+
+  static TRACE: LogLevel;
+  static DEBUG: LogLevel;
+  static INFO: LogLevel;
+  static WARN: LogLevel;
+  static ERROR: LogLevel;
+  static OFF: LogLevel;
 
   value: number;
 
-  static valueOf(name: string) {
-    return LogLevel[name];
+  static valueOf(name: string): ?LogLevel {
+    const level = LogLevel[name];
+    if (level instanceof LogLevel) {
+      return level;
+    }
+    return null;
   }
 
   constructor(value: LogLevel | number) {

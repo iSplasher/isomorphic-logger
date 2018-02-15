@@ -1,14 +1,32 @@
-import type {Processor, Record} from './types/ProcessorType';
+// @flow
 import {LogLevel} from './LogLevel';
+
+type Awaitable<T> = Promise<T> | T;
+
+type Record = {
+  level: LogLevel;
+  messages: [];
+  meta: *;
+};
+
+type ProcessorResult = ?Awaitable<?Record[]>;
+
+type Processor =
+  (records: Record[]) => ProcessorResult;
+
+type Channel = {
+  processors: Processor[];
+  promise: ?Promise<?Record[]>;
+}
 
 export class Logger {
 
   level: LogLevel = LogLevel.INFO;
-  channels = [];
 
-  setLevel(level: LogLevel): Logger {
+  channels: Channel[] = [];
+
+  setLevel(level: LogLevel): void {
     this.level = level;
-    return this;
   }
 
   /**
@@ -22,7 +40,7 @@ export class Logger {
    *
    * @returns {Logger}
    */
-  channel(...processors: Processor[]): Logger {
+  channel(...processors: Processor[]): void {
     processors = processors.map(processor => {
       if (typeof processor === 'function') {
         return processor;
@@ -33,8 +51,7 @@ export class Logger {
       throw new Error('Processor should be a function or an object with `process` callback');
     });
 
-    this.channels.push({processors, promise: null, pendingCount: 0});
-    return this;
+    this.channels.push({processors, promise: undefined});
   }
 
   /**
@@ -43,71 +60,75 @@ export class Logger {
    * @param {Array} records
    * @return {Promise|null}
    */
-  process(records: Record[]) {
+  process(records: Record[]): ?Awaitable<Record[]> {
+    let r = records.filter(record => record.level >= this.level.valueOf());
+
+    if (!r.length) {
+      return records;
+    }
+
     const promises = [];
 
     for (const channel of this.channels) {
-      let r: Record[] = records.filter(record => record.level >= this.level);
+      let p: Processor[] = [...channel.processors];
+      let promise;
 
-      if (r.length) {
-        if (channel.pendingCount > 0) {
-          r = Promise.resolve(r);
+      function next(p: Processor[], r: ?Record[], i: number): ProcessorResult {
+        if (!r) {
+          return;
         }
-        for (const processor of channel.processors) {
-          if (r instanceof Promise) {
-            r = r.then(records => records && processor(records));
-          } else {
-            r = processor(r);
-            if (!r) {
-              break;
-            }
-          }
-        }
-        if (r instanceof Promise) {
-          const decrease = () => {channel.pendingCount -= 1};
+        if (i < p.length) {
 
-          r = r.then(decrease, error => {
-            console.sendMessages(error);
-            decrease();
-          });
+          let r1: ProcessorResult = p[i](r);
 
-          if (channel.pendingCount > 0) {
-            channel.promise = channel.promise.then(() => r);
+          if (r1 instanceof Promise) {
+            return r1.then(r2 => next(p, r2, i + 1));
           } else {
-            channel.promise = r;
+            return next(p, r1, i + 1);
           }
-          channel.pendingCount += 1;
+        } else {
+          if (channel.promise === promise) {
+            channel.promise = undefined;
+          }
         }
       }
 
-      if (channel.pendingCount > 0) {
-        promises.push(channel.promise);
+      if (channel.promise) {
+        promise = channel.promise = channel.promise.then(() => next(p, r, 0)); 
+      } else {
+        promise = next(p, r, 0);
+        if (promise instanceof Promise) {
+          channel.promise = promise;
+        }
+      }
+      if (promise) {
+        promises.push(promise);
       }
     }
     if (promises.length) {
-      return Promise.all(promises).then(() => null);
+      return Promise.all(promises).then(() => records);
     }
-    return null;
+    return records;
   }
 
   isTraceEnabled() {
-    return this.level >= LogLevel.TRACE;
+    return this.level.valueOf() >= LogLevel.TRACE.valueOf();
   }
 
   isDebugEnabled() {
-    return this.level >= LogLevel.DEBUG;
+    return this.level.valueOf() >= LogLevel.DEBUG.valueOf();
   }
 
   isInfoEnabled() {
-    return this.level >= LogLevel.INFO;
+    return this.level.valueOf() >= LogLevel.INFO.valueOf();
   }
 
   isWarnEnabled() {
-    return this.level >= LogLevel.WARN;
+    return this.level.valueOf() >= LogLevel.WARN.valueOf();
   }
 
   isErrorEnabled() {
-    return this.level >= LogLevel.ERROR;
+    return this.level.valueOf() >= LogLevel.ERROR.valueOf();
   }
 
   /**
@@ -119,31 +140,31 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  sendMessages(level: LogLevel, messages: Array<*>, meta: *) {
+  sendMessages(level: LogLevel, messages: [], meta: *) {
     return this.process([{level, messages, meta}]);
   }
   
-  log(...messages: *) {
+  log(...messages: []) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  trace(...messages: *) {
+  trace(...messages: []) {
     return this.sendMessages(LogLevel.TRACE, messages);
   }
 
-  debug(...messages: *) {
+  debug(...messages: []) {
     return this.sendMessages(LogLevel.DEBUG, messages);
   }
 
-  info(...messages: *) {
+  info(...messages: []) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  warn(...messages: *) {
+  warn(...messages: []) {
     return this.sendMessages(LogLevel.WARN, messages);
   }
 
-  error(...messages: *) {
+  error(...messages: []) {
     return this.sendMessages(LogLevel.ERROR, messages);
   }
 }

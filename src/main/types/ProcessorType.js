@@ -1,6 +1,12 @@
-// @flow
 
 import {LogLevel} from '../LogLevel';
+
+
+
+
+
+
+
 
 export type Record = {
   level: LogLevel;
