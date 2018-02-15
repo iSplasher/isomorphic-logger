@@ -1,20 +1,23 @@
-/**
- * Creates log processor that replaces error messages with their stack trace and crops excessive Webpack paths.
- */
-import type {Processor, Record} from '../types/ProcessorType';
+// @flow
+import type {Processor, Record} from '../types/LoggerType';
+import type {ProcessorOptions} from '../types/LoggerConfigParserType';
 
-function webpackStackCleaner(stack) {
-   return stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '')
+type StackTraceTransformProcessorOptions = ProcessorOptions & {
+  transformer: (stack: string) => string;
 }
 
-export function createStackTraceTransformProcessor({
-    replacer = webpackStackCleaner
-} = {}): Processor {
+function webpackStackCleaner(stack: string): string {
+  return stack.replace(/\/[^(\n]+(target.out|webpack:)(~?\/)+/g, '');
+}
+
+export function createStackTraceTransformProcessor(options: StackTraceTransformProcessorOptions = {transformer: webpackStackCleaner}): Processor {
+  const {transformer} = options;
+
   return (records: Record[]) => records.map(record => ({
     ...record,
     messages: record.messages.map(message => {
       if (message instanceof Error) {
-        return replacer(message.stack);
+        return transformer(message.stack);
       }
       return message;
     })

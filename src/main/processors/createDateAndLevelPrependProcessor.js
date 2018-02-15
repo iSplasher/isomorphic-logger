@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../types/ProcessorType';
+import type {Processor, Record} from '../types/LoggerType';
 import moment from 'moment';
 import {LogLevel} from '../LogLevel';
 

@@ -15,14 +15,23 @@ jest.mock('../main/Logger', () => {
 
 describe('parseLoggerConfig', () => {
 
-  it(`creates an instance of logger`, () => {
+  it(`creates an instance of logger for empty object`, () => {
     const logger = parseLoggerConfig({});
+    expect(logger).toBeInstanceOf(Logger);
+  });
+
+  it(`creates an instance of logger from null`, () => {
+    const logger = parseLoggerConfig(null);
     expect(logger).toBeInstanceOf(Logger);
   });
 
   it(`calls Logger.setLevel if config.level is present`, () => {
     const logger = parseLoggerConfig({level: 'INFO'});
     expect(logger.setLevel).lastCalledWith(LogLevel.INFO);
+  });
+
+  it(`throws if log level is unknown`, () => {
+    expect(() => parseLoggerConfig({level: 'foo'})).toThrow();
   });
 
   it(`creates runs through channels[][processors] and throws error if processor creator is not described in schema`, () => {

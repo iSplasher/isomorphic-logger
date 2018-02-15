@@ -7,7 +7,6 @@ describe(`Logger`, () => {
     const l = new Logger();
     expect(l.level).toBe(LogLevel.INFO);
   });
-
 });
 
 describe(`Logger.channel`, () => {

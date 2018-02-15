@@ -1,30 +1,39 @@
-import type {Processor, Record} from '../types/ProcessorType';
+// @flow
+import type {Processor, Record} from '../types/LoggerType';
+import type {ProcessorOptions} from '../types/LoggerConfigParserType';
 import {createAggregateProcessor} from './createAggregateProcessor';
 
-export function createThrottleProcessor({
-  delay = 1000,
-  length = 1000,
-  leading = true
-} = {}): Processor {
+type ThrottleProcessorOptions = ProcessorOptions & {
+  delay: number;
+  length: number;
+  leading: boolean;
+};
+
+export function createThrottleProcessor(options: ThrottleProcessorOptions = {
+  delay: 1000,
+  length: 1000,
+  leading: true
+}): Processor {
+  const {delay, length, leading} = options;
   let timeout;
 
   return createAggregateProcessor({
-    predicate(records: Record[], dispatch) {
+    onDispatch(records: Record[], next): void {
       if (records.length < length) {
         // Aggregator did not collect enough records yet.
         if (leading) {
           if (!timeout) {
             timeout = setTimeout(() => {
               timeout = 0;
-              dispatch();
+              next();
             }, delay);
           }
         } else {
-          timeout = setTimeout(dispatch, delay);
+          timeout = setTimeout(next, delay);
         }
       } else {
         clearTimeout(timeout);
-        dispatch();
+        next();
       }
     }
   });

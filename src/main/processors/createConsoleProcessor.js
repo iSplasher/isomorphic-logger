@@ -1,4 +1,5 @@
-import type {Processor, Record} from '../types/ProcessorType';
+// @flow
+import type {Processor, Record} from '../types/LoggerType';
 import {LogLevel} from '../LogLevel';
 
 export function createConsoleProcessor(): Processor {

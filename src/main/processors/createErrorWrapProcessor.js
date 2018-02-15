@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../types/ProcessorType';
+import type {Processor, Record} from '../types/LoggerType';
 import StackTrace from 'stacktrace-js';
 import {LogLevel} from '../LogLevel';
 

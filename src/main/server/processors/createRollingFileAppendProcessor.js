@@ -1,4 +1,4 @@
-import type {Processor, Record} from '../../types/ProcessorType';
+import type {Processor, Record} from '../../types/LoggerType';
 import fs from 'fs';
 import {createFileAppendProcessor} from './createFileAppendProcessor';
 

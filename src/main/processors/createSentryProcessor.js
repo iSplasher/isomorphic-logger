@@ -1,12 +1,21 @@
-import type {Processor, Record} from '../types/ProcessorType';
+// @flow
+import type {Processor, Record} from '../types/LoggerType';
 import {LogLevel} from '../LogLevel';
 
-export function createSentryProcessor(sentry): Processor {
+type Sentry = {
+  captureMessage(...varargs: *): *;
+  captureException(...varargs: *): *;
+}
+
+export function createSentryProcessor(sentry: Sentry): Processor {
   return (records: Record[]) => {
     for (const {level, messages, meta} of records) {
-      const [message] = messages;
-      if (level < LogLevel.ERROR) {
-        sentry.captureMessage(message, {level: level < LogLevel.WARN ? 'info' : 'warn', meta});
+      if (!messages.length) {
+        continue;
+      }
+      const message = messages[0];
+      if (level.valueOf() < LogLevel.ERROR.valueOf()) {
+        sentry.captureMessage(message, {level: level.valueOf() < LogLevel.WARN.valueOf() ? 'info' : 'warn', meta});
       } else {
         sentry.captureException(message, {level: 'error', meta});
       }

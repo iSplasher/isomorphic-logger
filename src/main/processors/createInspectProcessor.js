@@ -2,7 +2,7 @@
  * Converts object messages to stringified representation.
  * @param {Number} [depth = 10] Object nesting depth.
  */
-import type {Processor, Record} from '../types/ProcessorType';
+import type {Processor, Record} from '../types/LoggerType';
 import objectInspect from 'object-inspect';
 
 export function createInspectProcessor({depth = 10} = {}): Processor {

@@ -2,28 +2,13 @@ import {createAggregateProcessor} from '../../main/processors/createAggregatePro
 
 describe(`createAggregateProcessor`, () => {
 
-  it('returns same promise if predicate did not return true', () => {
-    const predicate = records => false;
-    const aggregate = createAggregateProcessor({predicate});
-    expect(aggregate([1])).toBe(aggregate([2]));
-  });
-
-  it('processes records that were collected before predicate returned true', async done => {
-    const predicate = records => records.length > 1;
-    const aggregate = createAggregateProcessor({predicate});
-
-    const promise = aggregate([1]);
-
-    expect(promise).toBe(aggregate([2]));
-    expect(promise).not.toBe(aggregate([3]));
-
-    expect(await promise).toEqual([1, 2]);
-    done();
-  });
-
-  it('flushes cache between processes', async done => {
-    const predicate = records => records.length > 1;
-    const aggregate = createAggregateProcessor({predicate});
+  it('flushes cache between processes', async () => {
+    const onDispatch = (records, next) => {
+      if (records.length > 1) {
+        next();
+      }
+    };
+    const aggregate = createAggregateProcessor({onDispatch});
 
     aggregate([1]);
     aggregate([2]); // Flush should happen after this statement.
@@ -32,18 +17,17 @@ describe(`createAggregateProcessor`, () => {
     aggregate([4]);
 
     expect(await promise).toEqual([3, 4]);
-    done();
   });
 
-  it('predicate can do asynchronous process', async done => {
-    const predicate = (records, dispatch) => {
+  it('onDispatch can do asynchronous process', async () => {
+    const onDispatch = (records, next) => {
       if (records.length > 1) {
-        setTimeout(dispatch, 10);
+        setTimeout(next, 10);
       }
       // Predicate always returns false, but invokes process asynchronously.
       return false;
     };
-    const aggregate = createAggregateProcessor({predicate});
+    const aggregate = createAggregateProcessor({onDispatch});
 
     const promise = aggregate([1]);
 
@@ -54,7 +38,6 @@ describe(`createAggregateProcessor`, () => {
     // but added synchronously to buffer.
 
     expect(await promise).toEqual([1, 2, 3]);
-    done();
   });
 
 });

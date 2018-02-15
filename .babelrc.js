@@ -44,8 +44,7 @@ switch (process.env.BABEL_ENV || process.env.NODE_ENV) {
         '@babel/preset-flow'
       ],
       plugins: [
-        '@babel/plugin-transform-runtime',
-        'babel-plugin-dynamic-import-node'
+        '@babel/plugin-transform-runtime'
       ]
     };
     break;

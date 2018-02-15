@@ -1,10 +1,9 @@
-import type {Processor, Record} from '../types/ProcessorType';
-import type {LogsConcatenatorOptions} from '../types/processors/LogsConcatenatorType';
+import type {Processor, Record} from '../types/LoggerType';
 import safeJsonStringify from 'safe-json-stringify';
 
-export function createMessageConcatProcessor({
-  stringifyLoggedValue = stringifyLog
-}: LogsConcatenatorOptions = {}): Processor {
+export function createMessageConcatProcessor(options = {}): Processor {
+  const {stringifyLoggedValue = stringifyLog} = options;
+
   return (records: Record[]) => records.map(({level, messages, meta}) => {
     if (messages.length === 0) {
       return {level, messages, meta};

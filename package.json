@@ -9,7 +9,10 @@
     "clent",
     "web",
     "isomorphic",
+    "universal",
     "rolling",
+    "react",
+    "native",
     "file",
     "debug"
   ],
@@ -36,30 +39,26 @@
       "<rootDir>/node_modules/"
     ]
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/cli": "7.0.0-beta.34",
     "@babel/core": "7.0.0-beta.34",
     "@babel/plugin-transform-regenerator": "7.0.0-beta.34",
     "@babel/plugin-transform-runtime": "7.0.0-beta.34",
     "@babel/preset-env": "7.0.0-beta.34",
-    "@babel/preset-stage-0": "7.0.0-beta.34",
     "@babel/preset-flow": "7.0.0-beta.34",
+    "@babel/preset-stage-0": "7.0.0-beta.34",
     "@babel/runtime": "7.0.0-beta.34",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^22.1.0",
-    "babel-loader": "^8.0.0-beta.0",
-    "babel-plugin-dynamic-import-node": "^1.2.0",
-    "jest": "^22.1.4",
     "flow-bin": "^0.61.0",
     "flow-watch": "^1.1.1",
-    "raven": "^2.4.0",
-    "raven-js": "^3.22.1",
-    "react-native-sentry": "^0.33.0",
-    "delay": "",
+    "jest": "^22.1.4"
+  },
+  "dependencies": {
     "moment": "2.20.1",
-    "object-inspect": "",
+    "object-inspect": "^1.5.0",
     "safe-json-stringify": "^1.0.4",
     "stacktrace-js": "^2.0.0",
-    "lodash": "^4.17.5"
+    "wolfy87-eventemitter": "^5.2.4"
   }
 }

@@ -1,23 +1,6 @@
 // @flow
+import type {Channel, Messages, Processor, ProcessorResult, Record} from './types/LoggerType';
 import {LogLevel} from './LogLevel';
-
-type Awaitable<T> = Promise<T> | T;
-
-type Record = {
-  level: LogLevel;
-  messages: [];
-  meta: *;
-};
-
-type ProcessorResult = ?Awaitable<?Record[]>;
-
-type Processor =
-  (records: Record[]) => ProcessorResult;
-
-type Channel = {
-  processors: Processor[];
-  promise: ?Promise<?Record[]>;
-}
 
 export class Logger {
 
@@ -60,7 +43,7 @@ export class Logger {
    * @param {Array} records
    * @return {Promise|null}
    */
-  process(records: Record[]): ?Awaitable<Record[]> {
+  process(records: Record[]): ProcessorResult {
     let r = records.filter(record => record.level >= this.level.valueOf());
 
     if (!r.length) {
@@ -79,10 +62,15 @@ export class Logger {
         }
         if (i < p.length) {
 
-          let r1: ProcessorResult = p[i](r);
+          let r1: ProcessorResult;
+          try {
+            r1 = p[i](r);
+          } catch(error) {
+            console.log(error);
+          }
 
           if (r1 instanceof Promise) {
-            return r1.then(r2 => next(p, r2, i + 1));
+            return r1.then(r2 => next(p, r2, i + 1)).catch(error => console.log(error));
           } else {
             return next(p, r1, i + 1);
           }
@@ -140,31 +128,31 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  sendMessages(level: LogLevel, messages: [], meta: *) {
+  sendMessages(level: LogLevel, messages: Messages, meta: *) {
     return this.process([{level, messages, meta}]);
   }
   
-  log(...messages: []) {
+  log(...messages: Messages) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  trace(...messages: []) {
+  trace(...messages: Messages) {
     return this.sendMessages(LogLevel.TRACE, messages);
   }
 
-  debug(...messages: []) {
+  debug(...messages: Messages) {
     return this.sendMessages(LogLevel.DEBUG, messages);
   }
 
-  info(...messages: []) {
+  info(...messages: Messages) {
     return this.sendMessages(LogLevel.INFO, messages);
   }
 
-  warn(...messages: []) {
+  warn(...messages: Messages) {
     return this.sendMessages(LogLevel.WARN, messages);
   }
 
-  error(...messages: []) {
+  error(...messages: Messages) {
     return this.sendMessages(LogLevel.ERROR, messages);
   }
 }
