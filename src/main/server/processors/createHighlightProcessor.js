@@ -29,6 +29,7 @@ export function createHighlightProcessor({colors = DEFAULT_COLORS} = {}): Proces
           message = chalk[method](message);
         }
       }
+      return message;
     })
   }));
 }
