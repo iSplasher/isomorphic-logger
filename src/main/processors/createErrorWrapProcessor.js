@@ -10,7 +10,7 @@ export function createErrorWrapProcessor({
   testMessage = defaultTestMessage,
   createStackTrace = defaultCreateStackTrace
 } = {}): Processor {
-  return (records: Record[]) => records.map(({level, messages, ...props}) => {
+  return (records: Record[]) => records.map(({level, messages, meta}) => {
     messages = [...messages];
     for (let i = 0; i < messages.length; ++i) {
       if (messages[i] instanceof Error || !testMessage(messages[i], level, i)) {
@@ -21,7 +21,7 @@ export function createErrorWrapProcessor({
       error.stack = createStackTrace(error.name, error.message, stackFrames);
       messages[i] = error;
     }
-    return {level, messages, ...props};
+    return {level, messages, meta};
   });
 }
 

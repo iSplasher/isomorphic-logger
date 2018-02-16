@@ -8,7 +8,7 @@ import {LogLevel} from '../../main/LogLevel';
 describe(`createErrorWrapProcessor`, () => {
 
   it(`saves passed records`, () => {
-    const records = [{level: 'foo', messages: [], extraProperty: 123}];
+    const records = [{level: 'foo', messages: [], meta: 123}];
     const errorWrapper = createErrorWrapProcessor();
     expect(errorWrapper(records)).toEqual(records);
   });
