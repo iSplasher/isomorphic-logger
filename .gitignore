@@ -1,8 +1,7 @@
 ### Project
 
 ## Assembly target defined in Webpack config
-/index.js
-/processors
+target
 
 
 ### JetBrains
@@ -10,10 +9,7 @@
 ## File-based project settings
 *.iws
 /out/
-
-## Shared code style
-.idea/*
-!.idea/codeStyleSettings.xml
+.idea
 
 
 ### SublimeText
@@ -32,6 +28,9 @@
 
 ## sFTP configuration file
 sftp-config.json
+
+## Package control identity of dependency trees
+package-lock.json
 
 ## Package control specific files
 Package Control.last-run
@@ -64,8 +63,9 @@ pids
 *.seed
 
 ## Dependency directories
-node_modules/
-jspm_packages/
+node_modules
+flow-typed
+jspm_packages
 
 ## Optional npm cache directory
 .npm
@@ -108,7 +108,7 @@ Temporary Items
 
 *~
 
-## Temporary files which can be created if a dispatch still has a handle
+## Temporary files which can be created if a process still has a handle
 ## open of a deleted file
 .fuse_hidden*
 

@@ -1,7 +1,9 @@
+// @flow
+import type {Processor, Record} from '../types/LoggerType';
 import {LogLevel} from '../LogLevel';
 
-export function createConsoleAppender() {
-  return records => {
+export function createConsoleProcessor(): Processor {
+  return (records: Record[]) => {
     for (const {level, messages} of records) {
       switch (level) {
 
@@ -9,6 +11,13 @@ export function createConsoleAppender() {
         case LogLevel.DEBUG:
           if (console.debug) {
             console.debug(...messages);
+            return;
+          }
+          break;
+
+        case LogLevel.INFO:
+          if (console.info) {
+            console.info(...messages);
             return;
           }
           break;

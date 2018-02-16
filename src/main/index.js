@@ -1,35 +1,40 @@
-import {createAggregator} from './processors/createAggregator';
-import {createArrayAppender} from './processors/createArrayAppender';
-import {createConsoleAppender} from './processors/createConsoleAppender';
-import {createDateAndLevelPrepender} from './processors/createDateAndLevelPrepender';
-import {createFileAppender} from './processors/createFileAppender';
-import {createHighlighter} from './processors/createHighlighter';
-import {createInspector} from './processors/createInspector';
-import {createRollingFileAppender} from './processors/createRollingFileAppender';
-import {createStackTraceExtractor} from './processors/createStackTraceExtractor';
-import {createThrottle} from './processors/createThrottle';
+import {Logger} from './Logger';
+import {parseLoggerConfig} from './parseLoggerConfig';
+import {createAggregateProcessor} from './processors/createAggregateProcessor';
+import {createConsoleProcessor} from './processors/createConsoleProcessor';
+import {createDateAndLevelPrependProcessor} from './processors/createDateAndLevelPrependProcessor';
+import {createInspectProcessor} from './processors/createInspectProcessor';
+import {createStackTraceTransformProcessor} from './processors/createStackTraceTransformProcessor';
+import {createThrottleProcessor} from './processors/createThrottleProcessor';
+import {createErrorWrapProcessor} from './processors/createErrorWrapProcessor';
+import {createMessageConcatProcessor} from './processors/createMessageConcatProcessor';
 
-export {Logger, Logger as default} from './Logger';
-export {createAggregator};
-export {createArrayAppender};
-export {createConsoleAppender};
-export {createDateAndLevelPrepender};
-export {createFileAppender};
-export {createHighlighter};
-export {createInspector};
-export {createRollingFileAppender};
-export {createStackTraceExtractor};
-export {createThrottle};
-
-export const PROCESSOR_FACTORIES = {
-  aggregator: createAggregator,
-  arrayAppender: createArrayAppender,
-  consoleAppender: createConsoleAppender,
-  dateAndLevelPrepender: createDateAndLevelPrepender,
-  fileAppender: createFileAppender,
-  highlighter: createHighlighter,
-  inspector: createInspector,
-  tollingFileAppender: createRollingFileAppender,
-  stackTraceExtractor: createStackTraceExtractor,
-  throttle: createThrottle
+export {LogLevel} from './LogLevel';
+export {
+  Logger,
+  Logger as default,
+  parseLoggerConfig,
+  createAggregateProcessor,
+  createConsoleProcessor,
+  createDateAndLevelPrependProcessor,
+  createInspectProcessor,
+  createStackTraceTransformProcessor,
+  createThrottleProcessor,
+  createErrorWrapProcessor,
+  createMessageConcatProcessor
 };
+export {createSentryProcessor} from './processors/createSentryProcessor';
+
+export const ProcessorFactories = {
+  logger: Logger,
+  aggregate: createAggregateProcessor,
+  console: createConsoleProcessor,
+  prependDateAndLevel: createDateAndLevelPrependProcessor,
+  inspect: createInspectProcessor,
+  extractStackTrace: createStackTraceTransformProcessor,
+  throttle: createThrottleProcessor,
+  wrapError: createErrorWrapProcessor,
+  concatMessages: createMessageConcatProcessor
+};
+
+

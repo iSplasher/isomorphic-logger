@@ -1,30 +1,32 @@
+import type {Processor, Record} from '../../types/LoggerType';
 import fs from 'fs';
-import {createFileAppender} from './createFileAppender';
+import {createFileAppendProcessor} from './createFileAppendProcessor';
 
-export function createRollingFileAppender(path, {
+export function createRollingFileAppendProcessor({
+  filePath,
   maxFileSize = 102400,
   ...fileAppenderOptions
-} = {}) {
-  const fileAppender = createFileAppender(path, fileAppenderOptions);
+} = {}): Processor {
+  const fileAppender = createFileAppendProcessor(filePath, fileAppenderOptions);
 
   let index = 1;
   while (true) {
     try {
-      fs.statSync(createFileName(path, index));
+      fs.statSync(createFileName(filePath, index));
     } catch (error) {
       break;
     }
     index++;
   }
 
-  return records => {
-    fs.stat(path, (error, stats) => {
+  return (records: Record[]) => {
+    fs.stat(filePath, (error, stats) => {
       if (error) {
         return;
       }
       if (stats.size >= maxFileSize) {
         try {
-          fs.renameSync(path, createFileName(path, index));
+          fs.renameSync(filePath, createFileName(filePath, index));
           index++;
         } catch(error) {
           // Prevent death if rename failed.

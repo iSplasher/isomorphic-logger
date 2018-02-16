@@ -8,8 +8,8 @@ Example of server-side logger instantiation:
 import {
   Logger,
   extractStackTrace,
-  createInspector,
-  createHighlighter,
+  createInspectProcessor,
+  createHighlightProcessor,
   writeToConsole
 } from '@grabrinc/isomorphic-logger/server';
 
@@ -17,8 +17,8 @@ const logger = new Logger;
 
 logger.channel(
   extractStackTrace,
-  createInspector(),
-  createHighlighter(),
+  createInspectProcessor(),
+  createHighlightProcessor(),
   writeToConsole
 );
 ```

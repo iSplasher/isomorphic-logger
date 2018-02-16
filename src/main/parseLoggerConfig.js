@@ -1,39 +1,39 @@
-import isString from 'lodash/isString';
+// @flow
+import type {LoggerConfig, ProcessorDictionary} from './types/LoggerConfigParserType';
 import {Logger} from './Logger';
+import {LogLevel} from './LogLevel';
 
-export function parseLoggerConfig(config, processorFactories = {}) {
-  const loggers = {};
-  for (const {id, channels} of config) {
-    const logger = new Logger;
+export function parseLoggerConfig(loggerConfig: LoggerConfig, processorDictionary: ProcessorDictionary = {}): Logger {
+  const logger = new Logger();
+  if (!loggerConfig) {
+    return logger;
+  }
+  const {level, channels} = loggerConfig;
+  if (level) {
+    const logLevel = LogLevel.valueOf(level);
+    if (!logLevel) {
+      throw new Error(`Unknown log level "${level}"`);
+    }
+    logger.setLevel(logLevel);
+  }
+  if (!channels) {
+    return logger;
+  }
+  for (const channel of channels) {
+    const processors = [];
+    for (const processor of channel) {
+      const {type, options} = processor;
+      const processorFactory = processorDictionary[type];
 
-    for (const {id, processors: factories} of channels) {
-      const processors = [];
-
-      for (let factory of factories) {
-        if (isString(factory)) {
-          // Reference to another logger in configuration.
-          if (factory.indexOf('#') == 0) {
-            const id = factory.substring(1);
-            processors.push(record => loggers[id].processRecord(record));
-            continue;
-          }
-          factory = {id: factory};
-        }
-        const {id, ...options} = factory;
-        if (id in processorFactories) {
-          processors.push(processorFactories[id](options));
-        } else {
-          throw new Error(`Factory ${id} could not be found`);
-        }
-      }
-
-      if (isString(id)) {
-        logger.appendChannel(id, processors);
+      if (type === 'logger') {
+        processors.push(parseLoggerConfig(options, processorDictionary))
+      } else if (!processorFactory) {
+        throw new Error(`Unknown processor type "${type}"`);
       } else {
-        logger.appendChannel(processors);
+        processors.push(processorFactory(options))
       }
     }
-    loggers[id] = logger;
+    logger.channel(...processors);
   }
-  return loggers;
+  return logger;
 }
