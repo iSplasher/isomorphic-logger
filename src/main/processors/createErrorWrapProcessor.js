@@ -2,7 +2,7 @@ import type {Processor, Record} from '../types/LoggerType';
 import StackTrace from 'stacktrace-js';
 import {LogLevel} from '../LogLevel';
 
-const LOGGER_STACK_FRAME_COUNT = 10;
+const LOGGER_STACK_FRAME_COUNT = 8;
 
 export function createErrorWrapProcessor({
   trimHeadFrames = 0,
