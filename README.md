@@ -89,30 +89,19 @@ import {
 import Sentry from 'raven-js';
 
 logger.channel(
-  // Converts error objects to string representing stack trace.
-  createStackTraceTransformProcessor(),
-  
-  // Prepends every message with date and time.
-  createDateAndLevelPrependProcessor({dateFormat: 'YYYY-MM-DD HH:MM:SS'}),
-  
-  // Batch logged messages.
-  createThrottleProcessor({delay: 500, length: 10}),
-  
-  // Write batched messaget to console.
-  createConsoleProcessor()
+  createStackTraceTransformProcessor(),              // Converts error objects to string representing stack trace.
+  createDateAndLevelPrependProcessor(),              // Prepends every message with date and time.
+  createThrottleProcessor({delay: 500, length: 10}), // Batch logged messages.
+  createConsoleProcessor()                           // Write batched messages to console.
 );
 
 logger.channel(
-  // Concat all messages into a single string.
-  createMessageConcatProcessor(),
+  createMessageConcatProcessor(), // Concat all messages into a single string.
+  createErrorWrapProcessor(),     // Wrap message into an Error object and trim excessive stack frames.
+  createSentryProcessor(Sentry)   // Send messages to Sentry.
+);
 
-  // Wrap message into an Error object and trim excessive stack frames.
-  // Message is wrapped only if it was logged at an appropriate log level.
-  createErrorWrapProcessor(),
-  
-  // Send messages to Sentry.
-  createSentryProcessor(Sentry)
-)
+logger.log('Hello there!') // This is logged to both console and Sentry
 ```
 
 Even if the channel contains an asynchronous processor, messages are guaranteed to be logged in the original order.
