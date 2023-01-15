@@ -1,7 +1,6 @@
 // @flow
 
 export class LogLevel {
-
   static TRACE: LogLevel;
   static DEBUG: LogLevel;
   static INFO: LogLevel;
@@ -11,7 +10,7 @@ export class LogLevel {
 
   value: number;
 
-  static valueOf(name: string): ?LogLevel {
+  static valueOf(name: string) {
     const level = LogLevel[name];
     if (level instanceof LogLevel) {
       return level;

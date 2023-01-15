@@ -1,5 +1,5 @@
 // @flow
-import type {Processor} from './LoggerType';
+import type { Processor } from "./LoggerType";
 
 export type LoggerConfig = ProcessorOptions & {
   level: string;
@@ -13,8 +13,8 @@ export type ProcessorConfig = {
   options?: ProcessorOptions;
 };
 
-export type ProcessorOptions = {[key: string]: *};
+export type ProcessorOptions = { [key: string]: any };
 
 export type ProcessorFactory = (options?: ProcessorOptions) => Processor;
 
-export type ProcessorDictionary = {[key: string]: ProcessorFactory};
+export type ProcessorDictionary = { [key: string]: ProcessorFactory };

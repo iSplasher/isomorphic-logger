@@ -1,9 +1,14 @@
 // @flow
-import type {Channel, Messages, Processor, ProcessorResult, Record} from './types/LoggerType';
-import {LogLevel} from './LogLevel';
+import type {
+  Channel,
+  Messages,
+  Processor,
+  ProcessorResult,
+  Record,
+} from "./types/LoggerType";
+import { LogLevel } from './LogLevel';
 
 export class Logger {
-
   level: LogLevel = LogLevel.INFO;
 
   channels: Channel[] = [];
@@ -24,17 +29,19 @@ export class Logger {
    * @returns {Logger}
    */
   channel(...processors: Processor[]): void {
-    processors = processors.map(processor => {
-      if (typeof processor === 'function') {
+    processors = processors.map((processor) => {
+      if (typeof processor === "function") {
         return processor;
       }
       if (processor && processor.process) {
-        return ::processor.process;
+        return processor.process;
       }
-      throw new Error('Processor should be a function or an object with `process` callback');
+      throw new Error(
+        "Processor should be a function or an object with `process` callback"
+      );
     });
 
-    this.channels.push({processors, promise: undefined});
+    this.channels.push({ processors, promise: undefined });
   }
 
   /**
@@ -44,7 +51,7 @@ export class Logger {
    * @return {Promise|null}
    */
   process(records: Record[]): ProcessorResult {
-    let r = records.filter(record => record.level >= this.level.valueOf());
+    let r = records.filter((record) => record.level >= this.level.valueOf());
 
     if (!r.length) {
       return records;
@@ -56,21 +63,26 @@ export class Logger {
       let p: Processor[] = [...channel.processors];
       let promise;
 
-      function next(p: Processor[], r: ?Record[], i: number): ProcessorResult {
+      function next(
+        p: Processor[],
+        r: Record[] | undefined,
+        i: number
+      ): ProcessorResult {
         if (!r) {
           return;
         }
         if (i < p.length) {
-
           let r1: ProcessorResult;
           try {
             r1 = p[i](r);
-          } catch(error) {
+          } catch (error) {
             console.log(error);
           }
 
           if (r1 instanceof Promise) {
-            return r1.then(r2 => next(p, r2, i + 1)).catch(error => console.log(error));
+            return r1
+              .then((r2) => next(p, r2, i + 1))
+              .catch((error) => console.log(error));
           } else {
             return next(p, r1, i + 1);
           }
@@ -82,7 +94,7 @@ export class Logger {
       }
 
       if (channel.promise) {
-        promise = channel.promise = channel.promise.then(() => next(p, r, 0)); 
+        promise = channel.promise = channel.promise.then(() => next(p, r, 0));
       } else {
         promise = next(p, r, 0);
         if (promise instanceof Promise) {
@@ -128,10 +140,10 @@ export class Logger {
    *
    * @returns {Promise} Promise that resolves when all channels did process provided messages.
    */
-  sendMessages(level: LogLevel, messages: Messages, meta: *) {
-    return this.process([{level, messages, meta}]);
+  sendMessages(level: LogLevel, messages: Messages, meta?: any) {
+    return this.process([{ level, messages, meta }]);
   }
-  
+
   log(...messages: Messages) {
     return this.sendMessages(LogLevel.INFO, messages);
   }

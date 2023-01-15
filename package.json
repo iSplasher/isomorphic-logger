@@ -27,7 +27,7 @@
   "main": "index.js",
   "homepage": "https://github.com/Grabr/isomorphic-logger",
   "scripts": {
-    "build": "rm -rf target/out; NODE_ENV=production babel src/main -d target/out",
+    "build": "rm -rf target/out && cross-env NODE_ENV=production babel src/main -d target/out",
     "test": "NODE_ENV=test jest --colors",
     "babel-flow": "rm -rf target/flow; BABEL_ENV=flow babel src -d target/flow",
     "flow": "flow",
@@ -40,25 +40,26 @@
     ]
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.34",
-    "@babel/core": "7.0.0-beta.34",
-    "@babel/plugin-transform-regenerator": "7.0.0-beta.34",
-    "@babel/plugin-transform-runtime": "7.0.0-beta.34",
-    "@babel/preset-env": "7.0.0-beta.34",
-    "@babel/preset-flow": "7.0.0-beta.34",
-    "@babel/preset-stage-0": "7.0.0-beta.34",
-    "@babel/runtime": "7.0.0-beta.34",
-    "babel-core": "^7.0.0-0",
-    "babel-jest": "^22.1.0",
-    "flow-bin": "^0.61.0",
-    "flow-watch": "^1.1.1",
-    "jest": "^22.1.4"
+    "@babel/cli": "^7.17.3",
+    "@babel/core": "^7.17.4",
+    "@babel/plugin-transform-regenerator": "7.16.7",
+    "@babel/plugin-transform-runtime": "7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-flow": "^7.16.7",
+    "@babel/preset-stage-0": "^7.8.3",
+    "@babel/runtime": "^7.17.2",
+    "babel-jest": "^27.5.1",
+    "cross-env": "^7.0.3",
+    "flow-bin": "^0.171.0",
+    "flow-watch": "^2.0.0",
+    "jest": "^27.5.1",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "moment": "2.20.1",
-    "object-inspect": "^1.5.0",
-    "safe-json-stringify": "^1.0.4",
-    "stacktrace-js": "^2.0.0",
-    "wolfy87-eventemitter": "^5.2.4"
+    "moment": "2.29.1",
+    "object-inspect": "^1.12.0",
+    "safe-json-stringify": "^1.2.0",
+    "stacktrace-js": "^2.0.2",
+    "wolfy87-eventemitter": "^5.2.9"
   }
 }

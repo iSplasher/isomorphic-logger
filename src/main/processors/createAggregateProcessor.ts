@@ -1,13 +1,15 @@
 // @flow
-import type {Processor, Record} from '../types/LoggerType';
-import type {ProcessorOptions} from '../types/LoggerConfigParserType';
+import type { Processor, Record } from "../types/LoggerType";
+import type { ProcessorOptions } from "../types/LoggerConfigParserType";
 
 type AggregateProcessorOptions = ProcessorOptions & {
-  onDispatch: (records: Record[], next: () => *) => void;
+  onDispatch: (records: Record[], next: () => any) => void;
 };
 
-export function createAggregateProcessor(options: AggregateProcessorOptions): Processor {
-  const {onDispatch} = options;
+export function createAggregateProcessor(
+  options: AggregateProcessorOptions
+): Processor {
+  const { onDispatch } = options;
   let resolve;
   let promise;
   let cache = [];
@@ -25,7 +27,7 @@ export function createAggregateProcessor(options: AggregateProcessorOptions): Pr
     onDispatch(cache, next);
   }
 
-  return records => {
+  return (records) => {
     cache.push(...records);
 
     if (resolve) {
@@ -34,7 +36,7 @@ export function createAggregateProcessor(options: AggregateProcessorOptions): Pr
       return nextPromise;
     } else {
       if (!promise) {
-        promise = new Promise(resolveSelf => {
+        promise = new Promise((resolveSelf) => {
           resolve = resolveSelf;
           tryDispatch();
         });
