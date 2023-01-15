@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/Grabr/isomorphic-logger/issues"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "homepage": "https://github.com/Grabr/isomorphic-logger",
   "scripts": {
     "build": "rm -rf target/out && cross-env NODE_ENV=production babel src/main -d target/out",
