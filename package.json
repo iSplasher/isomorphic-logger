@@ -61,5 +61,6 @@
     "safe-json-stringify": "^1.2.0",
     "stacktrace-js": "^2.0.2",
     "wolfy87-eventemitter": "^5.2.9"
-  }
+  },
+  "packageManager": "yarn@3.6.3"
 }
