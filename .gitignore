@@ -1,5 +1,7 @@
 ### Project
 
+.vscode/
+
 ## Assembly target defined in Webpack config
 target
 

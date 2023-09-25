@@ -1,9 +1,7 @@
 name: Feature Request
-description: Suggest an idea for HPX
+description: Suggest an idea for this package
 title: "[Feat]: "
 labels: ["enhancement"]
-assignees:
-  - isplasher
 body:
   - type: markdown
     attributes:
