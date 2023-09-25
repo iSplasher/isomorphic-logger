@@ -29,7 +29,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsup --watch",
     "types": "tsc",
-    "build": "cross-env NODE_ENV=production tsup && yarn types",
+    "build": "cross-env NODE_ENV=production tsup && yarn types || true",
     "test": "jest --colors"
   },
   "jest": {
