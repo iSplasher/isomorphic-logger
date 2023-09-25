@@ -38,8 +38,6 @@ jobs:
               echo "Tag ${{ env.TAG_NAME }} already exists; Use [force-release] to skip check."
               exit 1
           else
-              npm run version
-              git add versions.json manifest.json manifest-beta.json
               echo "Will create tag ${{ env.TAG_NAME }} on release."
               echo "PUSH_TAG=true" >> $GITHUB_ENV
           fi
