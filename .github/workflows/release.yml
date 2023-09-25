@@ -108,7 +108,6 @@ jobs:
           args: --verbose --latest --strip header
         env:
           OUTPUT: "CHANGELOG.md"
-
           
       - name: Create Release
         id: create_release
@@ -122,3 +121,8 @@ jobs:
           fail_on_unmatched_files: true
           files: |
             isomorphic-logger.zip
+
+      - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v2
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
