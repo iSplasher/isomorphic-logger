@@ -3,10 +3,12 @@ import type {
   Channel,
   Messages,
   Processor,
+  ProcessorLike,
+  ProcessorObject,
   ProcessorResult,
   Record,
 } from "./types/LoggerType";
-import { LogLevel } from './LogLevel';
+import { LogLevel } from "./loglevel";
 
 export class Logger {
   level: LogLevel = LogLevel.INFO;
@@ -28,20 +30,25 @@ export class Logger {
    *
    * @returns {Logger}
    */
-  channel(...processors: Processor[]): void {
-    processors = processors.map((processor) => {
-      if (typeof processor === "function") {
-        return processor;
+  channel(...processors: ProcessorLike[]): void {
+    const procs: Processor[] = processors.map((processor) => {
+      const p = processor;
+      if (typeof p === "function") {
+        return processor as Processor;
       }
-      if (processor && processor.process) {
-        return processor.process;
+
+      const pobject = processor as ProcessorObject | undefined;
+
+      if (pobject?.process) {
+        return pobject.process;
       }
+
       throw new Error(
         "Processor should be a function or an object with `process` callback"
       );
     });
 
-    this.channels.push({ processors, promise: undefined });
+    this.channels.push({ processors: procs, promise: undefined });
   }
 
   /**
@@ -51,17 +58,19 @@ export class Logger {
    * @return {Promise|null}
    */
   process(records: Record[]): ProcessorResult {
-    let r = records.filter((record) => record.level >= this.level.valueOf());
+    let r = records.filter(
+      (record) => record.level.valueOf() >= this.level.valueOf()
+    );
 
     if (!r.length) {
       return records;
     }
 
-    const promises = [];
+    const promises: ProcessorResult[] = [];
 
     for (const channel of this.channels) {
-      let p: Processor[] = [...channel.processors];
-      let promise;
+      const p: Processor[] = [...channel.processors];
+      let promise: ProcessorResult;
 
       function next(
         p: Processor[],
@@ -76,13 +85,14 @@ export class Logger {
           try {
             r1 = p[i](r);
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
 
           if (r1 instanceof Promise) {
-            return r1
+            const r = r1
               .then((r2) => next(p, r2, i + 1))
               .catch((error) => console.log(error));
+            return r as ProcessorResult;
           } else {
             return next(p, r1, i + 1);
           }
@@ -101,6 +111,7 @@ export class Logger {
           channel.promise = promise;
         }
       }
+
       if (promise) {
         promises.push(promise);
       }

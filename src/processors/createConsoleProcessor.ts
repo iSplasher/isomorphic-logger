@@ -1,12 +1,11 @@
 // @flow
-import type {Processor, Record} from '../types/LoggerType';
-import {LogLevel} from '../LogLevel';
+import type { Processor, Record } from "../types/LoggerType";
+import { LogLevel } from "../loglevel";
 
 export function createConsoleProcessor(): Processor {
   return (records: Record[]) => {
-    for (const {level, messages} of records) {
+    for (const { level, messages } of records) {
       switch (level) {
-
         case LogLevel.TRACE:
         case LogLevel.DEBUG:
           if (console.debug) {
@@ -36,5 +35,5 @@ export function createConsoleProcessor(): Processor {
       console.log(...messages);
     }
     return records;
-  }
+  };
 }

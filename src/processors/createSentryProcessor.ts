@@ -1,6 +1,6 @@
 // @flow
 import type { Processor, Record } from "../types/LoggerType";
-import { LogLevel } from '../LogLevel';
+import { LogLevel } from "../loglevel";
 
 type Sentry = {
   captureMessage(...varargs: any[]): any;

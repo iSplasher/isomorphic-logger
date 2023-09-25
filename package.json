@@ -1,6 +1,6 @@
 {
   "name": "@isplasher/isomorphic-logger",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "iSplasher <dev@comfstudio.dk>",
   "description": "Isomorphic logger",
   "keywords": [
@@ -27,11 +27,10 @@
   "main": "dist/index.js",
   "homepage": "https://github.com/iSplasher/isomorphic-logger",
   "scripts": {
-    "build": "rm -rf target/out && cross-env NODE_ENV=production babel src/main -d target/out",
-    "test": "NODE_ENV=test jest --colors",
-    "babel-flow": "rm -rf target/flow; BABEL_ENV=flow babel src -d target/flow",
-    "flow": "flow",
-    "flow-watch": "rm -rf target/flow; BABEL_ENV=flow babel src -d target/flow --watch & PID=$!; sleep 5; flow-watch; kill -9 $PID"
+    "dev": "cross-env NODE_ENV=development tsup --watch",
+    "types": "tsc",
+    "build": "cross-env NODE_ENV=production tsup && yarn types",
+    "test": "jest --colors"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -40,20 +39,11 @@
     ]
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.3",
-    "@babel/core": "^7.17.4",
-    "@babel/plugin-transform-regenerator": "7.16.7",
-    "@babel/plugin-transform-runtime": "7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-flow": "^7.16.7",
-    "@babel/preset-stage-0": "^7.8.3",
-    "@babel/runtime": "^7.17.2",
-    "babel-jest": "^27.5.1",
+    "@types/jest": "^29.5.5",
     "cross-env": "^7.0.3",
-    "flow-bin": "^0.171.0",
-    "flow-watch": "^2.0.0",
-    "jest": "^27.5.1",
-    "typescript": "^4.5.5"
+    "jest": "^29.7.0",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "moment": "2.29.1",

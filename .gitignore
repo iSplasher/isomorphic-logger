@@ -5,6 +5,8 @@
 ## Assembly target defined in Webpack config
 target
 
+dist/
+
 
 ### JetBrains
 

@@ -1,7 +1,7 @@
 import type { Processor, Record } from "../types/LoggerType";
-import StackTrace from 'stacktrace-js';
+import StackTrace from "stacktrace-js";
 
-import { LogLevel } from '../LogLevel';
+import { LogLevel } from "../loglevel";
 
 const LOGGER_STACK_FRAME_COUNT = 8;
 

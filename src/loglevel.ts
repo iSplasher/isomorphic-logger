@@ -1,5 +1,3 @@
-// @flow
-
 export class LogLevel {
   static TRACE: LogLevel;
   static DEBUG: LogLevel;
@@ -8,7 +6,7 @@ export class LogLevel {
   static ERROR: LogLevel;
   static OFF: LogLevel;
 
-  value: number;
+  value: number = Number.MAX_VALUE;
 
   static valueOf(name: string) {
     const level = LogLevel[name];
