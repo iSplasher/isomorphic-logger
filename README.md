@@ -1,9 +1,11 @@
 # Isomorphic Logger
+> Note: This package is a (hard)-fork of @grabrinc//isomorphic-logger which suddenly disappeared from the face of the internet.
+> This fork attempts to rewrite, mordernize, and bring new features.
 
 Tiny isomorphic logger that has the same semantics on the server and on the client with multi-channel support and modular structure.
 
 ```js
-import {Logger, createConsoleProcessor} from '@grabrinc/isomorphic-logger';
+import {Logger, createConsoleProcessor} from '@isplasher/isomorphic-logger';
 
 const logger = new Logger;
 
@@ -31,7 +33,7 @@ Each method accepts an arbitrary number of arguments as `console.log` does.
 Setting log level on `Logger` instance allows to limit verbosity of the output:
 
 ```js
-import {LogLevel} from '@grabrinc/isomorphic-logger';
+import {LogLevel} from '@isplasher/isomorphic-logger';
 
 // Now messages with warn level or higher are logged.
 logger.setLevel(LogLevel.WARN);
@@ -78,15 +80,15 @@ To set up a logger instance you need to define at least one channel.
 
 Channel consists of processors that are executed one after another and can be asynchronous.
 
-```js
+```ts
 import {
   Logger,
   createStackTraceTransformProcessor,
   createDateAndLevelPrependProcessor,
   createThrottleProcessor,
   createConsoleProcessor
-} from '@grabrinc/isomorphic-logger';
-import Sentry from 'raven-js';
+} from '@isplasher/isomorphic-logger';
+import * as Sentry from '@sentry/node'; // or @sentry/<platform>
 
 logger.channel(
   createStackTraceTransformProcessor(),              // Converts error objects to string representing stack trace.
@@ -108,7 +110,7 @@ Even if the channel contains an asynchronous processor, messages are guaranteed 
 
 Logger itself is also a processor, so you can nest one logger into another:
 
-```js
+```ts
 const errorLogger = new Logger();
 errorLogger.setLevel(LogLevel.ERROR);
 errorLogger.channel(createSentryProcessor(Sentry));
@@ -129,31 +131,31 @@ logger.error('Oh snap!') // This is logged in the console and send to Sentry
 
 Following processors are available at the moment:
 
-- [`createAggregateProcessor()`](src/main/processors/createAggregateProcessor.js)
-- [`createConsoleProcessor()`](src/main/processors/createConsoleProcessor.js)
-- [`createDateAndLevelPrependProcessor()`](src/main/processors/createDateAndLevelPrependProcessor.js)
-- [`createErrorWrapProcessor()`](src/main/processors/createErrorWrapProcessor.js)
-- [`createInspectProcessor()`](src/main/processors/createInspectProcessor.js)
-- [`createMessageConcatProcessor()`](src/main/processors/createMessageConcatProcessor.js)
-- [`createSentryProcessor()`](src/main/processors/createSentryProcessor.js)
-- [`createStackTraceTransformProcessor()`](src/main/processors/createStackTraceTransformProcessor.js)
-- [`createThrottleProcessor()`](src/main/processors/createThrottleProcessor.js)
+- [`createAggregateProcessor()`](src/main/processors/createAggregateProcessor.ts)
+- [`createConsoleProcessor()`](src/main/processors/createConsoleProcessor.ts)
+- [`createDateAndLevelPrependProcessor()`](src/main/processors/createDateAndLevelPrependProcessor.ts)
+- [`createErrorWrapProcessor()`](src/main/processors/createErrorWrapProcessor.ts)
+- [`createInspectProcessor()`](src/main/processors/createInspectProcessor.ts)
+- [`createMessageConcatProcessor()`](src/main/processors/createMessageConcatProcessor.ts)
+- [`createSentryProcessor()`](src/main/processors/createSentryProcessor.ts)
+- [`createStackTraceTransformProcessor()`](src/main/processors/createStackTraceTransformProcessor.ts)
+- [`createThrottleProcessor()`](src/main/processors/createThrottleProcessor.ts)
 
-There are also server-only processors available which can be imported from `@grabrinc/isomorphic-logger/server`:
+There are also server-only processors available which can be imported from `@isplasher/isomorphic-logger/server`:
 
-- [`createHighlightProcessor()`](src/main/server/processors/createHighlightProcessor.js)
-- [`createFileAppendProcessor()`](src/main/server/processors/createFileAppendProcessor.js) Unstable!
-- [`createRollingFileAppendProcessor()`](src/main/server/processors/createRollingFileAppendProcessor.js) Unstable!
+- [`createHighlightProcessor()`](src/main/server/processors/createHighlightProcessor.ts)
+- [`createFileAppendProcessor()`](src/main/server/processors/createFileAppendProcessor.ts) Unstable!
+- [`createRollingFileAppendProcessor()`](src/main/server/processors/createRollingFileAppendProcessor.ts) Unstable!
 
 
 ### How to create a custom processor?
 
 A processor is a function that receives a set of records:
 
-```flow
+```ts
 type Record = {
   level: LogLevel,
-  messages: Array<*>
+  messages: any[]
 }
 
 function myCustomProcessor(records: Record[]): Promise<Record[]> | Record[] | Promise<null> | null {
@@ -163,7 +165,7 @@ function myCustomProcessor(records: Record[]): Promise<Record[]> | Record[] | Pr
 
 Or an object that has `process` function property:
 
-```js
+```ts
 const myCustomProcessor = {
 
   process(records: Record[]): Promise<Record[]> | Record[] | Promise<null> | null {
@@ -178,9 +180,9 @@ If processor returns false value than next processor is not invoked.
 
 A processor can return `Promise` that is awaited before proceeding to next processor.
 
-If you need to ensure logging was completed before continuing code execution you can:
+If you need to ensure logging was completed before continuing code execution you can `await` the log call:
 
-```js
+```ts
 await logger.error('Wait for this messages to log!', error);
 ```
 
@@ -189,8 +191,8 @@ await logger.error('Wait for this messages to log!', error);
 
 Logger can be created from JSON configuration:
 
-```js
-import {parseLoggerConfig, ProcessorFactories} from '@grabrinc/isomorphic-logger';
+```ts
+import {parseLoggerConfig, ProcessorFactories} from '@isplasher/isomorphic-logger';
 
 const loggerConfig = {
   level: 'TRACE',
@@ -223,4 +225,4 @@ const logger = parseLoggerConfig(loggerConfig, ProcessorFactories);
 
 ## License
 
-The code is available under [MIT license](LICENSE.txt).
+The code is available under [MIT license](LICENSE).
