@@ -1,14 +1,13 @@
-import {createAggregateProcessor} from '../../main/processors/createAggregateProcessor';
+import { createAggregateProcessor } from "../../../src/processors/createAggregateProcessor";
 
 describe(`createAggregateProcessor`, () => {
-
-  it('flushes cache between processes', async () => {
+  it("flushes cache between processes", async () => {
     const onDispatch = (records, next) => {
       if (records.length > 1) {
         next();
       }
     };
-    const aggregate = createAggregateProcessor({onDispatch});
+    const aggregate = createAggregateProcessor({ onDispatch });
 
     aggregate([1]);
     aggregate([2]); // Flush should happen after this statement.
@@ -19,7 +18,7 @@ describe(`createAggregateProcessor`, () => {
     expect(await promise).toEqual([3, 4]);
   });
 
-  it('onDispatch can do asynchronous process', async () => {
+  it("onDispatch can do asynchronous process", async () => {
     const onDispatch = (records, next) => {
       if (records.length > 1) {
         setTimeout(next, 10);
@@ -27,7 +26,7 @@ describe(`createAggregateProcessor`, () => {
       // Predicate always returns false, but invokes process asynchronously.
       return false;
     };
-    const aggregate = createAggregateProcessor({onDispatch});
+    const aggregate = createAggregateProcessor({ onDispatch });
 
     const promise = aggregate([1]);
 
@@ -39,5 +38,4 @@ describe(`createAggregateProcessor`, () => {
 
     expect(await promise).toEqual([1, 2, 3]);
   });
-
 });

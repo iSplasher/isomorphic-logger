@@ -33,25 +33,19 @@
     "build": "cross-env NODE_ENV=production tsup && yarn types || true",
     "test": "jest --colors"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>/target/",
-      "<rootDir>/node_modules/"
-    ]
-  },
   "devDependencies": {
     "@types/jest": "^29.5.5",
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "moment": "2.29.1",
-    "object-inspect": "^1.12.0",
+    "moment": "^2.29.4",
+    "object-inspect": "^1.12.3",
     "safe-json-stringify": "^1.2.0",
-    "stacktrace-js": "^2.0.2",
-    "wolfy87-eventemitter": "^5.2.9"
+    "stacktrace-js": "^2.0.2"
   },
   "packageManager": "yarn@3.6.3"
 }
