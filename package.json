@@ -1,6 +1,6 @@
 {
   "name": "@isplasher/isomorphic-logger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "iSplasher <dev@comfstudio.dk>",
   "description": "Isomorphic logger",
   "keywords": [
