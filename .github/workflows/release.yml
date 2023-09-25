@@ -51,7 +51,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: node_modules-${{hashFiles('package-lock.json')}}
+          key: node_modules-${{hashFiles('yarn.lock')}}
           restore-keys: node_modules- # Take any latest cache if failed to find it for current lock file
 
       - name: Install dependencies

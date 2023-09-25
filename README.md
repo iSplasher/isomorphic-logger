@@ -1,19 +1,19 @@
 # Isomorphic Logger
+
 > Note: This package is a (hard)-fork of @grabrinc//isomorphic-logger which suddenly disappeared from the face of the internet.
 > This fork attempts to rewrite, mordernize, and bring new features.
 
 Tiny isomorphic logger that has the same semantics on the server and on the client with multi-channel support and modular structure.
 
 ```js
-import {Logger, createConsoleProcessor} from '@isplasher/isomorphic-logger';
+import { Logger, createConsoleProcessor } from "@isplasher/isomorphic-logger";
 
-const logger = new Logger;
+const logger = new Logger();
 
 logger.channel(createConsoleProcessor());
 
-logger.log('Hello world!', {foo: 'bar'}); // → Prints "Hello world! {foo: 'bar'}" to console
+logger.log("Hello world!", { foo: "bar" }); // → Prints "Hello world! {foo: 'bar'}" to console
 ```
-
 
 ## Logging
 
@@ -27,13 +27,12 @@ These methods are available on `Logger` instance and log messages at correspondi
 
 Each method accepts an arbitrary number of arguments as `console.log` does.
 
-
 ## Logging Level
 
 Setting log level on `Logger` instance allows to limit verbosity of the output:
 
 ```js
-import {LogLevel} from '@isplasher/isomorphic-logger';
+import { LogLevel } from "@isplasher/isomorphic-logger";
 
 // Now messages with warn level or higher are logged.
 logger.setLevel(LogLevel.WARN);
@@ -54,7 +53,6 @@ You can create your own log level via instantinating `LogLevel` class:
 logger.setLevel(new LogLevel(150));
 ```
 
-
 ### Logging Level Test
 
 If you want to perform heavy computations when particular logging level is set, you can use logging level test methods:
@@ -62,17 +60,17 @@ If you want to perform heavy computations when particular logging level is set, 
 ```js
 if (logger.isDebugEnabled()) {
   // Do heavy stuff here
-  logger.debug('Computation results');
+  logger.debug("Computation results");
 }
 ```
 
 These methods are availeble on `Logger` instance:
+
 - `isTraceEnabled()`
 - `isDebugEnabled()`
 - `isInfoEnabled()`
 - `isWarnEnabled()`
 - `isErrorEnabled()`
-
 
 ## Channels
 
@@ -86,24 +84,24 @@ import {
   createStackTraceTransformProcessor,
   createDateAndLevelPrependProcessor,
   createThrottleProcessor,
-  createConsoleProcessor
-} from '@isplasher/isomorphic-logger';
-import * as Sentry from '@sentry/node'; // or @sentry/<platform>
+  createConsoleProcessor,
+} from "@isplasher/isomorphic-logger";
+import * as Sentry from "@sentry/node"; // or @sentry/<platform>
 
 logger.channel(
-  createStackTraceTransformProcessor(),              // Converts error objects to string representing stack trace.
-  createDateAndLevelPrependProcessor(),              // Prepends every message with date and time.
-  createThrottleProcessor({delay: 500, length: 10}), // Batch logged messages.
-  createConsoleProcessor()                           // Write batched messages to console.
+  createStackTraceTransformProcessor(), // Converts error objects to string representing stack trace.
+  createDateAndLevelPrependProcessor(), // Prepends every message with date and time.
+  createThrottleProcessor({ delay: 500, length: 10 }), // Batch logged messages.
+  createConsoleProcessor() // Write batched messages to console.
 );
 
 logger.channel(
   createMessageConcatProcessor(), // Concat all messages into a single string.
-  createErrorWrapProcessor(),     // Wrap message into an Error object and trim excessive stack frames.
-  createSentryProcessor(Sentry)   // Send messages to Sentry.
+  createErrorWrapProcessor(), // Wrap message into an Error object and trim excessive stack frames.
+  createSentryProcessor(Sentry) // Send messages to Sentry.
 );
 
-logger.log('Hello there!') // This is logged to both console and Sentry
+logger.log("Hello there!"); // This is logged to both console and Sentry
 ```
 
 Even if the channel contains an asynchronous processor, messages are guaranteed to be logged in the original order.
@@ -120,12 +118,10 @@ logger.setLevel(LogLevel.TRACE);
 logger.channel(createConsoleProcessor());
 logger.channel(errorLogger);
 
+logger.log("Foo"); // This is logged in the console only
 
-logger.log('Foo'); // This is logged in the console only
-
-logger.error('Oh snap!') // This is logged in the console and send to Sentry
+logger.error("Oh snap!"); // This is logged in the console and send to Sentry
 ```
-
 
 ### Available Processors
 
@@ -147,18 +143,19 @@ There are also server-only processors available which can be imported from `@isp
 - [`createFileAppendProcessor()`](src/main/server/processors/createFileAppendProcessor.ts) Unstable!
 - [`createRollingFileAppendProcessor()`](src/main/server/processors/createRollingFileAppendProcessor.ts) Unstable!
 
-
 ### How to create a custom processor?
 
 A processor is a function that receives a set of records:
 
 ```ts
 type Record = {
-  level: LogLevel,
-  messages: any[]
-}
+  level: LogLevel;
+  messages: any[];
+};
 
-function myCustomProcessor(records: Record[]): Promise<Record[]> | Record[] | Promise<null> | null {
+function myCustomProcessor(
+  records: Record[]
+): Promise<Record[]> | Record[] | Promise<null> | null {
   return records;
 }
 ```
@@ -167,11 +164,12 @@ Or an object that has `process` function property:
 
 ```ts
 const myCustomProcessor = {
-
-  process(records: Record[]): Promise<Record[]> | Record[] | Promise<null> | null {
+  process(
+    records: Record[]
+  ): Promise<Record[]> | Record[] | Promise<null> | null {
     return records;
-  }
-}
+  },
+};
 ```
 
 A processor should do some stuff with messages and return a new set of records that is passed to the next processor.
@@ -183,9 +181,8 @@ A processor can return `Promise` that is awaited before proceeding to next proce
 If you need to ensure logging was completed before continuing code execution you can `await` the log call:
 
 ```ts
-await logger.error('Wait for this messages to log!', error);
+await logger.error("Wait for this messages to log!", error);
 ```
-
 
 ## Declarative Logger Configuration
 
