@@ -1,6 +1,6 @@
 {
   "name": "@isplasher/isomorphic-logger",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "iSplasher <dev@comfstudio.dk>",
   "description": "Isomorphic logger",
   "keywords": [
@@ -26,11 +26,12 @@
   },
   "homepage": "https://github.com/iSplasher/isomorphic-logger",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsup --watch",
+    "dev": "cross-env NODE_ENV=development tsup --format esm,cjs --watch",
     "types": "tsc",
-    "build": "cross-env NODE_ENV=production tsup && yarn types || true",
+    "build": "cross-env NODE_ENV=production tsup --format esm,cjs && yarn types || true",
     "test": "jest --colors"
   },
   "devDependencies": {
