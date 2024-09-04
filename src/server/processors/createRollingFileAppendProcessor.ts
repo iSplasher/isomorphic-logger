@@ -7,7 +7,7 @@ export function createRollingFileAppendProcessor({
   maxFileSize = 102400,
   ...fileAppenderOptions
 } = {}): Processor {
-  const fileAppender = createFileAppendProcessor(filePath, fileAppenderOptions);
+  const fileAppender = createFileAppendProcessor({filePath, ...fileAppenderOptions});
 
   let index = 1;
   while (true) {

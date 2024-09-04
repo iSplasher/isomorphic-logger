@@ -2,21 +2,17 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src/index.ts"],
+  skipNodeModulesBundle: true,
+  treeshake: true,
+  shims: true,
   splitting: true,
   sourcemap: true,
   clean: true,
-  format: ["cjs", "esm", "iife"],
+  format: ["cjs"],
   target: [
     "es6",
-    "deno1",
-    "chrome58",
-    "edge16",
-    "firefox57",
-    "safari11",
-    "node12",
-    "ios16.6",
     // "hermes0.73",
   ],
-  bundle: false,
+  bundle: true,
   // dts: true,
 });

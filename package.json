@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/iSplasher/isomorphic-logger",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsup --format esm,cjs --watch",
-    "types": "tsc",
-    "build": "cross-env NODE_ENV=production tsup --format esm,cjs && yarn types || true",
+    "dev": "cross-env NODE_ENV=development tsup --watch",
+    "esm": "tsc",
+    "build": "cross-env NODE_ENV=production tsup  && yarn esm || true",
     "test": "jest --colors"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
-    "tsup": "^7.2.0",
+    "tsup": "^8.2.4",
     "typescript": "^5.2.2"
   },
   "dependencies": {
